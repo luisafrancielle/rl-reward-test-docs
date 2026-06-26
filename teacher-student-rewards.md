@@ -90,8 +90,6 @@ env_kwargs:
 
 ## Vídeo baseline
 
-Esses vídeos usam a config base acima, com `track_lin_vel_xy_exp: 1.5`. Eles servem como referência antes de comparar os sweeps da recompensa.
-
 **Teacher**
 
 <video controls preload="metadata" width="100%">
