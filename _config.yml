@@ -1,5 +1,5 @@
 title: "RL Reward Documentation"
-description: "Documentação das funções de recompensa para as arquiteturas Base e Teacher–Student"
+description: "Documentação de como as funções de recompensa influenciam a caminhada do agente para as arquiteturas Base e Teacher–Student"
 lang: "pt-BR"
 
 baseurl: "/rl-reward-test-docs"
