@@ -1,3 +1,12 @@
+---
+layout: default
+title: Rewards · Base
+section: base-rewards
+kicker: BASE ARCHITECTURE · REWARD DESIGN
+description: Documentação da função de recompensa utilizada na arquitetura base.
+permalink: /base-rewards/
+---
+
 # Anotações Treinos
 
 Config Mestre para avaliação das mudanças de parâmetros.
