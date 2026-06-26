@@ -5,3 +5,4 @@ lang: "pt-BR"
 baseurl: "/rl-reward-test-docs"
 permalink: pretty
 markdown: kramdown
+highlighter: rouge

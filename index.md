@@ -4,7 +4,7 @@ title: RL Reward Documentation
 section: home
 hero: true
 hero_kicker: REINFORCEMENT LEARNING · REWARD DOCUMENTATION
-hero_title: Reward Design Hub
+hero_title: RL Reward
 hero_subtitle: Documentação técnica das funções de recompensa utilizadas nas arquiteturas Base e Teacher–Student.
 ---
 
