@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'pt-BR' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title | default: site.title }} · {{ site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-content">
+      <a class="brand" href="{{ '/' | relative_url }}">
+        <span class="brand-symbol">◈</span>
+
+        <span>
+          <strong>RL REWARD LAB</strong>
+          <small>Documentation Hub</small>
+        </span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="{{ '/' | relative_url }}"
+           class="{% if page.section == 'home' %}active{% endif %}">
+          Início
+        </a>
+
+        <a href="{{ '/base-rewards/' | relative_url }}"
+           class="{% if page.section == 'base-rewards' %}active{% endif %}">
+          Rewards · Base
+        </a>
+
+        <a href="{{ '/teacher-student-rewards/' | relative_url }}"
+           class="{% if page.section == 'teacher-student-rewards' %}active{% endif %}">
+          Rewards · Teacher–Student
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  {% if page.hero %}
+    <section class="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-glow"></div>
+
+      <div class="hero-content">
+        <p class="eyebrow">{{ page.hero_kicker }}</p>
+        <h1>{{ page.hero_title }}</h1>
+        <p>{{ page.hero_subtitle }}</p>
+
+        <div class="hero-buttons">
+          <a class="button primary" href="{{ '/base-rewards/' | relative_url }}">
+            Ver rewards da Base
+          </a>
+
+          <a class="button secondary" href="{{ '/teacher-student-rewards/' | relative_url }}">
+            Ver rewards Teacher–Student
+          </a>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <main class="page-container">
+    {% unless page.hero %}
+      <p class="eyebrow">{{ page.kicker | default: "DOCUMENTAÇÃO TÉCNICA" }}</p>
+      <h1 class="page-title">{{ page.title }}</h1>
+
+      {% if page.description %}
+        <p class="page-description">{{ page.description }}</p>
+      {% endif %}
+    {% endunless %}
+
+    <article class="content-card">
+      {{ content }}
+    </article>
+  </main>
+
+  <footer>
+    RL Reward Documentation · GitHub Pages
+  </footer>
+</body>
+</html>
