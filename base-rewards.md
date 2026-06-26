@@ -2,7 +2,7 @@
 layout: default
 title: Rewards · Base
 section: base-rewards
-kicker: BASE ARCHITECTURE · REWARD DESIGN
+kicker: BASE ARCHITECTURE
 description: Documentação da função de recompensa utilizada na arquitetura base.
 permalink: /base-rewards/
 ---
