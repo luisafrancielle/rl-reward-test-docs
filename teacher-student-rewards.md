@@ -11,6 +11,30 @@ permalink: /teacher-student-rewards/
 
 Config base para avaliação das mudanças de parâmetros em Teacher–Student. Ele não anda muito bem, mas foi o primeiro que consegui fazer andar.
 
+## Hiperparâmetros do PPO
+
+| parâmetro | valor |
+| --- | --- |
+| `learning_rate` | `1.0e-3` |
+| `num_envs` | `4096` |
+| `num_steps` | `24` |
+| `anneal_lr` | `false` |
+| `gamma` | `0.99` |
+| `gae_lambda` | `0.95` |
+| `num_minibatches` | `4` |
+| `update_epochs` | `5` |
+| `norm_adv` | `true` |
+| `clip_coef` | `0.2` |
+| `clip_vloss` | `true` |
+| `ent_coef` | `0.01` |
+| `vf_coef` | `1.0` |
+| `max_grad_norm` | `1.0` |
+| `adaptive_lr` | `true` |
+| `desired_kl` | `0.01` |
+| `lr_min` | `1.0e-5` |
+| `lr_max` | `1.0e-2` |
+| `target_kl` | `0.01` |
+
 ```python
 #teacher_student_papder2.yml
 use_teacher_student: true
@@ -90,17 +114,22 @@ env_kwargs:
 
 ## Vídeo baseline
 
-**Teacher**
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
 
-<video controls preload="metadata" width="100%">
-  <source src="{{ '/videos/policy-step-190021632-teacher.mp4' | relative_url }}" type="video/mp4">
-</video>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-190021632-teacher.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
 
-**Student**
-
-<video controls preload="metadata" width="100%">
-  <source src="{{ '/videos/policy-step-190021632-student.mp4' | relative_url }}" type="video/mp4">
-</video>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-190021632-student.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 ## Recompensa avaliada
 
@@ -135,73 +164,291 @@ onde:
 * a função fica perto de `1.0` quando o robô segue bem o comando;
 * o peso no config define quanto esse acerto de velocidade entra na soma total da recompensa.
 
-No Teacher–Student, essa recompensa tem dois efeitos. Primeiro, ela força o **teacher** a aprender uma política que segue velocidade linear. Depois, o **student** tenta reproduzir esse comportamento usando histórico de observações e o latente de adaptação.
 
 ## Sweep `track_lin_vel_xy_exp`
 
 ### `track_lin_vel_xy_exp = 0.5`
 
-**Teacher**
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
 
-<video controls preload="metadata" width="100%">
-  <source src="{{ '/videos/policy-step-299925504-teacher-tracklin_0p5.mp4' | relative_url }}" type="video/mp4">
-</video>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-teacher-tracklin_0p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
 
-**Student**
-
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-student-tracklin_0p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 ### `track_lin_vel_xy_exp = 1.0`
 
-**Teacher**
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
 
-<video controls preload="metadata" width="100%">
-  <source src="{{ '/videos/policy-step-280068096-teacher-tracklin-1p0.mp4' | relative_url }}" type="video/mp4">
-</video>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-tracklin-1p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
 
-**Student**
-
-<video controls preload="metadata" width="100%">
-  <source src="{{ '/videos/policy-step-280068096-student-tracklin-1p0.mp4' | relative_url }}" type="video/mp4">
-</video>
-
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-tracklin-1p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 ### `track_lin_vel_xy_exp = 3.0`
 
 
-**Teacher**
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
 
-<video controls preload="metadata" width="100%">
-  <source src="{{ '/videos/policy-step-280068096-teacher-tracklin-3p0.mp4' | relative_url }}" type="video/mp4">
-</video>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-tracklin-3p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
 
-**Student**
-
-<video controls preload="metadata" width="100%">
-  <source src="{{ '/videos/policy-step-280068096-student-tracklin-3p0.mp4' | relative_url }}" type="video/mp4">
-</video>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-tracklin-3p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 ### `track_lin_vel_xy_exp = 5.0`
 
-**Teacher**
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
 
-<video controls preload="metadata" width="100%">
-  <source src="{{ '/videos/policy-step-280068096-teacher-tracklin-5p0.mp4' | relative_url }}" type="video/mp4">
-</video>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-tracklin-5p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
 
-**Student**
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-tracklin-5p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 
-<video controls preload="metadata" width="100%">
-  <source src="{{ '/videos/policy-step-280068096-student-tracklin-5p0.mp4' | relative_url }}" type="video/mp4">
-</video>
+| config | valor | Métricas |
+| --- | --- | --- |
+| `sweep_ts_tracklin_0p5.yml` | `0.5` | |
+| `sweep_ts_tracklin_1p0.yml` | `1.0` | |
+| `sweep_ts_tracklin_3p0.yml` | `3.0` | |
+| `sweep_ts_tracklin_5p0.yml` | `5.0` | |
 
-## Resumo dos testes
+## Sweep `track_ang_vel_z_exp`
 
-| config | valor | razão vs baseline TS (`1.5`) | vídeos |
-| --- | --- | --- | --- |
-| `teacher/student-tracklin_0p5` | `0.5` | ÷3 |
-| `teacher/student-tracklin-1p0` | `1.0` | ÷1.5 | 
-| `teacher/student-tracklin-3p0` | `3.0` | ×2 | 
-| `teacher/student-tracklin-5p0` | `5.0` | ×3.33 | 
+### `track_ang_vel_z_exp = 0.25`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-trackang_0p25.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-trackang_0p25.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `track_ang_vel_z_exp = 1.5`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-260014080-teacher-trackang_1p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-trackang_1p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `track_ang_vel_z_exp = 3.0`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-trackang_3p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-trackang_3p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | Métricas |
+| --- | --- | --- |
+| `sweep_ts_trackang_0p25.yml` | `0.25` | |
+| `sweep_ts_trackang_1p5.yml` | `1.5` | |
+| `sweep_ts_trackang_3p0.yml` | `3.0` | |
+
+## Sweep `feet_air_time`
+
+### `feet_air_time = 0.5`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-teacher-feetair_0p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-student-feetair_0p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `feet_air_time = 2.0`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-feetair_2p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-feetair_2p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | Métricas |
+| --- | --- | --- |
+| `sweep_ts_feetair_0p5.yml` | `0.5` | |
+| `sweep_ts_feetair_2p0.yml` | `2.0` | |
+
+## Sweep `flat_orientation_l2`
+
+### `flat_orientation_l2 = -1.0`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-flatorient_1p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-flatorient_1p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `flat_orientation_l2 = -5.0`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-teacher-flatorient_5p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-student-flatorient_5p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | Métricas |
+| --- | --- | --- |
+| `sweep_ts_flatorient_1p0.yml` | `-1.0` | |
+| `sweep_ts_flatorient_5p0.yml` | `-5.0` | |
+
+## Sweep `is_alive`
+
+### `is_alive = 0.25`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-isalive_0p25.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-isalive_0p25.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `is_alive = 0.5`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-isalive_0p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-isalive_0p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | Métricas |
+| --- | --- | --- |
+| `sweep_ts_isalive_0p25.yml` | `0.25` | |
+| `sweep_ts_isalive_0p5.yml` | `0.5` | |
 
 ## Interpretação geral
-

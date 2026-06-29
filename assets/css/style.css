@@ -412,6 +412,42 @@ body::before {
   background: transparent;
 }
 
+.video-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.6rem;
+}
+
+.video-panel {
+  min-width: 0;
+}
+
+.video-single {
+  max-width: calc((100% - 1rem) / 2);
+  margin: 1rem 0 1.6rem;
+}
+
+.video-panel p {
+  margin: 0 0 0.45rem;
+}
+
+.video-panel video {
+  display: block;
+  width: 100%;
+  border-radius: 0.3rem;
+}
+
+@media (max-width: 720px) {
+  .video-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .video-single {
+    max-width: none;
+  }
+}
+
 .content-card .highlight {
   margin: 1.4rem 0;
 }
