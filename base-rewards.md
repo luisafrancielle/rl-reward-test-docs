@@ -103,7 +103,14 @@ env_kwargs:
 ```
 
 **Vídeo Baseline**
-[https://t90132646619.p.clickup-attachments.com/t90132646619/608154b7-9a02-4217-941e-f4fb7f41293a/config\_policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/608154b7-9a02-4217-941e-f4fb7f41293a/config_policy-step-999424000.mp4?view=open)
+<div class="video-grid">
+  <div class="video-panel">
+    <p><strong>baseline</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/config_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 Azul : Hipótese feita, os resultados confirmarão, ou não.
 ## Recompensas
 o Isaac Lab multiplica **todo** termo por `dt` (≈0.02). Então a contribuição real por step é `weight × 1.0 × dt`.
@@ -144,9 +151,20 @@ Retorna **1.0** em todo step que o robô **não** terminou (não caiu/não r
 Treinos:
 Sweep isalive\_0: [https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/1uaj7uq0?nw=nwuserimdudak](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/1uaj7uq0?nw=nwuserimdudak) | Sweep isalive\_1: [https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/sivema1e?nw=nwuserimdudak](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/sivema1e?nw=nwuserimdudak)
 
-[https://t90132646619.p.clickup-attachments.com/t90132646619/fd02ba64-ffe5-4e79-a39c-4494ce151b19/sweep\_isalive\_0\_policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/fd02ba64-ffe5-4e79-a39c-4494ce151b19/sweep_isalive_0_policy-step-999424000.mp4?view=open)
-
-[https://t90132646619.p.clickup-attachments.com/t90132646619/6ef146b5-2695-409e-b7c3-7bb88a180f5d/sweep\_isalive\_1p0\_policy-step-999424000.mp4policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/6ef146b5-2695-409e-b7c3-7bb88a180f5d/sweep_isalive_1p0_policy-step-999424000.mp4policy-step-999424000.mp4?view=open)
+<div class="video-grid">
+  <div class="video-panel">
+    <p><strong>isalive_0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_isalive_0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>isalive_1p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_isalive_1p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 Com a recompensa desativada, o robô teve maior dificuldade para aprender a andar. Por outro lado, aumentar a recompensa para 1.0 piorou quase todos os gráficos(ou ficou muito parecido). ![](https://t90132646619.p.clickup-attachments.com/t90132646619/4ac6d146-3b1f-4503-86f1-3db038ac5d0f/image.png)
 ### track\_lin\_vel\_xy\_exp
@@ -177,13 +195,32 @@ onde:
 *   `std = 0.5`, então `std² = 0.25`
 _"quanto mais perto do comando, mais perto de 1"_
 
-[https://t90132646619.p.clickup-attachments.com/t90132646619/23f59132-88e8-44b7-92dd-547ee946fe0c/sweep\_tracklin\_0p5\_policy-step-999424000.mp4policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/23f59132-88e8-44b7-92dd-547ee946fe0c/sweep_tracklin_0p5_policy-step-999424000.mp4policy-step-999424000.mp4?view=open)
-
-[https://t90132646619.p.clickup-attachments.com/t90132646619/4db7d72d-e962-4ff3-a588-6fac9af3468f/sweep\_tracklin\_1p0\_policy-step-499712000.mp4policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/4db7d72d-e962-4ff3-a588-6fac9af3468f/sweep_tracklin_1p0_policy-step-499712000.mp4policy-step-999424000.mp4?view=open)
-
-[https://t90132646619.p.clickup-attachments.com/t90132646619/aa4d2e1b-6017-44cb-82de-b9d749e3f6e5/sweep\_tracklin\_3p0\_policy-step-499712000.mp4policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/aa4d2e1b-6017-44cb-82de-b9d749e3f6e5/sweep_tracklin_3p0_policy-step-499712000.mp4policy-step-999424000.mp4?view=open)
-
-[https://t90132646619.p.clickup-attachments.com/t90132646619/400d012a-568c-4bd8-b5a9-364974767401/sweep\_tracklin\_5p0\_policy-step-499712000.mp4policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/400d012a-568c-4bd8-b5a9-364974767401/sweep_tracklin_5p0_policy-step-499712000.mp4policy-step-999424000.mp4?view=open)
+<div class="video-grid">
+  <div class="video-panel">
+    <p><strong>tracklin_0p5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_tracklin_0p5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>tracklin_1p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_tracklin_1p0_policy-step-499712000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>tracklin_3p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_tracklin_3p0_policy-step-499712000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>tracklin_5p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_tracklin_5p0_policy-step-499712000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 | config | valor | razão vs baseline (1.5) | Link |
 | ---| ---| ---| --- |
@@ -218,13 +255,32 @@ def track_ang_vel_z_exp(env, std, command_name, asset_cfg):
 *   peso baseline = **0.75** (metade do `track_lin` 1.5)
 _"quanto mais perto do comando, mais perto de 1"_
 
-[https://t90132646619.p.clickup-attachments.com/t90132646619/d62bbedd-2347-44d1-a188-b42fa84007e7/sweep\_trackang\_0p25\_policy-step-999424000.mp4policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/d62bbedd-2347-44d1-a188-b42fa84007e7/sweep_trackang_0p25_policy-step-999424000.mp4policy-step-999424000.mp4?view=open)
-
-[https://t90132646619.p.clickup-attachments.com/t90132646619/edaab1be-6a17-4620-be57-66fa8a0c0d63/sweep\_trackang\_0p5\_policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/edaab1be-6a17-4620-be57-66fa8a0c0d63/sweep_trackang_0p5_policy-step-999424000.mp4?view=open)
-
-[https://t90132646619.p.clickup-attachments.com/t90132646619/33f26c8c-c80a-4a68-ac24-d188fc5e8730/sweep\_trackang\_1p5\_policy-step-999424000.mp4policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/33f26c8c-c80a-4a68-ac24-d188fc5e8730/sweep_trackang_1p5_policy-step-999424000.mp4policy-step-999424000.mp4?view=open)
-
-[https://t90132646619.p.clickup-attachments.com/t90132646619/f2eeae48-d206-4b49-b70f-9b53ba072ec3/sweep\_trackang\_3p0\_policy-step-999424000.mp4policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/f2eeae48-d206-4b49-b70f-9b53ba072ec3/sweep_trackang_3p0_policy-step-999424000.mp4policy-step-999424000.mp4?view=open)
+<div class="video-grid">
+  <div class="video-panel">
+    <p><strong>trackang_0p25</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_trackang_0p25_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>trackang_0p5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_trackang_0p5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>trackang_1p5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_trackang_1p5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>trackang_3p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_trackang_3p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 | config | valor | razão vs baseline (0.75) | links |
 | ---| ---| ---| --- |
@@ -261,12 +317,32 @@ onde:
 Pune o tronco **subir e descer** (movimento vertical). É um kernel **L2** (quadrático), sem `exp`: cresce com o **quadrado** da velocidade vertical — então velocidade pequena custa pouco, mas velocidade grande custa **muito** (penaliza picos bruscos).
 A ideia: numa caminhada boa, o tronco deve ficar numa altura **estável**, sem **quicar**. Toda vez que o robô pula, balança verticalmente ou bate no chão e ressalta, gera `v_z` ≠ 0 e é punido.
 
-[https://t90132646619.p.clickup-attachments.com/t90132646619/744e6e27-74b5-4745-9fbc-f35e5a052553/sweep\_linvelz\_5p0\_policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/744e6e27-74b5-4745-9fbc-f35e5a052553/sweep_linvelz_5p0_policy-step-999424000.mp4?view=open)
-
-[sweep\_linvelz\_3p0\_policy-step-999424000.mp4](undefined)
-
-[https://t90132646619.p.clickup-attachments.com/t90132646619/5d4f896c-78e4-491c-9841-be4ee2a841b7/sweep\_linvelz\_1p0\_policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/5d4f896c-78e4-491c-9841-be4ee2a841b7/sweep_linvelz_1p0_policy-step-999424000.mp4?view=open)[https://t90132646619.p.clickup-attachments.com/t90132646619/91ad907c-f671-4941-b8a7-34f7542e5b99/sweep\_linvelz\_0p5\_policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/91ad907c-f671-4941-b8a7-34f7542e5b99/sweep_linvelz_0p5_policy-step-999424000.mp4?view=open)
-You don't have access to this Doc
+<div class="video-grid">
+  <div class="video-panel">
+    <p><strong>linvelz_5p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_linvelz_5p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>linvelz_3p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_linvelz_3p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>linvelz_1p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_linvelz_1p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>linvelz_0p5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_linvelz_0p5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 ## hiperparâmetros
 ### learning\_rate
 **Otimizador:**
@@ -289,9 +365,20 @@ if args.anneal_lr:
 Treinos:
 Sweep lr 0003 : [https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/w6qzxu82?nw=nwuserimdudak](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/w6qzxu82?nw=nwuserimdudak) | Sweep lr 003 : [https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0d0cxqse?nw=nwuserimdudak](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0d0cxqse?nw=nwuserimdudak)
 
-[https://t90132646619.p.clickup-attachments.com/t90132646619/1854d008-80ee-44f8-8b40-94a82705eb65/sweep\_lr\_0003\_policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/1854d008-80ee-44f8-8b40-94a82705eb65/sweep_lr_0003_policy-step-999424000.mp4?view=open)
-
-[https://t90132646619.p.clickup-attachments.com/t90132646619/599cd032-a4fd-4aba-a304-a7b3d46106b5/sweep\_lr\_003\_policy-step-999424000.mp4policy-step-999424000.mp4?view=open](https://t90132646619.p.clickup-attachments.com/t90132646619/599cd032-a4fd-4aba-a304-a7b3d46106b5/sweep_lr_003_policy-step-999424000.mp4policy-step-999424000.mp4?view=open)
+<div class="video-grid">
+  <div class="video-panel">
+    <p><strong>lr_0003</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_lr_0003_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>lr_003</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_lr_003_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 #### Como impacta o aprendizado?
 *   Controla **quão rápido** a política muda a cada update. Não muda o gradiente (a direção), só a **magnitude do passo**.
