@@ -12,7 +12,7 @@ permalink: /teacher-student-rewards/
 Config base para avaliação das mudanças de parâmetros em Teacher–Student. Ele não anda muito bem, mas foi o primeiro que consegui fazer andar.
 
 ```python
-#teacher_student_papder2.yml
+#teacher_student_paper2.yml
 use_teacher_student: true
 
 seed: 42
@@ -246,15 +246,12 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_tracklin_0p5.yml` | `0.5` | travado, colado no chão — não anda | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/qgacg2ai?nw=nwuserluisafrancielle) |
-| `sweep_ts_tracklin_1p0.yml` | `1.0` | anda, parecido ao baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/v07pjluf?nw=nwuserluisafrancielle) |
+| `sweep_ts_tracklin_0p5.yml` | `0.5` | não anda, colado no chão | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/qgacg2ai?nw=nwuserluisafrancielle) |
+| `sweep_ts_tracklin_1p0.yml` | `1.0` | não anda, cai para frente | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/v07pjluf?nw=nwuserluisafrancielle) |
 | `sweep_ts_tracklin_3p0.yml` | `3.0` | anda, parecido ao baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/t44xqn2s?nw=nwuserluisafrancielle) |
-| `sweep_ts_tracklin_5p0.yml` | `5.0` | anda, mas saltitante / mais esquisito | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/oianwp30?nw=nwuserluisafrancielle) |
+| `sweep_ts_tracklin_5p0.yml` | `5.0` | anda, mais saltitante / mais esquisito | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/oianwp30?nw=nwuserluisafrancielle) |
 
-**Conclusão — `track_lin_vel_xy_exp`:** Em `1.0`,
-`1.5` (baseline) e `3.0` o robô anda parecido. A recompensa quebra nos extremos:
-em `0.5` ele **congela** ("colado no chão"); em `5.0` ele caminha meio pulando e de forma desengonçada. Ou seja,
-`track_lin` é influente, mas o robô é robusto a uma boa faixa de pesos.
+**Conclusão — `track_lin_vel_xy_exp`:** 
 
 ## Sweep `track_ang_vel_z_exp`
 
@@ -347,9 +344,16 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_trackang_0p25.yml` | `0.25` | | |
-| `sweep_ts_trackang_1p5.yml` | `1.5` | | |
-| `sweep_ts_trackang_3p0.yml` | `3.0` | | |
+| `sweep_ts_trackang_0p25.yml` | `0.25` | não anda — cai de lado | |
+| `sweep_ts_trackang_1p5.yml` | `1.5` | não anda — trava no chão — | |
+| `sweep_ts_trackang_3p0.yml` | `3.0` | não anda - trava no chão, uma pata da frente levantada | |
+
+**Conclusão — `track_ang_vel_z_exp`:** muito mais sensível que o `track_lin` — qualquer
+desvio do baseline (`0.75`) já quebra a caminhada. Abaixo (`0.25`) o
+controle de yaw fica fraco e o robô cai de lado. Acima
+(`1.5`, `3.0`) premia fortemente o
+"yaw zero" e é melhor ficando imóvel (parado = giro nulo = recompensa maior),
+então o robô trava no chão. Só o baseline `0.75` anda. O `track_ang` tem uma janela estreita em torno do baseline.
 
 ## Sweep `feet_air_time`
 
@@ -526,7 +530,6 @@ def is_alive(env):
 
 onde:
 * retorna `1.0` em todo step **vivo**, `0.0` no step em que termina;
-* na **base** o baseline era `0.5`; no **TS** é `0.0` — esse contraste é o ponto central do estudo;
 
 ### `is_alive = 0.25`
 
@@ -568,7 +571,12 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_isalive_0p25.yml` | `0.25` | | |
-| `sweep_ts_isalive_0p5.yml` | `0.5` | | |
+| `sweep_ts_isalive_0p25.yml` | `0.25` | anda — patas mais soltas, cada uma difere da outra | |
+| `sweep_ts_isalive_0p5.yml` | `0.5` | anda — galopa em sincronia | |
+
+**Conclusão — `is_alive`:** ao contrário do `track_ang`, não quebra a caminhada nesta faixa —
+o robô continua andando nos dois valores. O efeito é na coordenação da passada: em `0.25`
+as patas ficam mais soltas e assimétricas (cada uma difere da outra); em `0.5` o "galope" fica
+sincronizado. 
 
 ## Interpretação geral
