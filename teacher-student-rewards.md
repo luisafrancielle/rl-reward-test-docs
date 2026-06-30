@@ -11,30 +11,6 @@ permalink: /teacher-student-rewards/
 
 Config base para avaliação das mudanças de parâmetros em Teacher–Student. Ele não anda muito bem, mas foi o primeiro que consegui fazer andar.
 
-## Hiperparâmetros do PPO
-
-| parâmetro | valor |
-| --- | --- |
-| `learning_rate` | `1.0e-3` |
-| `num_envs` | `4096` |
-| `num_steps` | `24` |
-| `anneal_lr` | `false` |
-| `gamma` | `0.99` |
-| `gae_lambda` | `0.95` |
-| `num_minibatches` | `4` |
-| `update_epochs` | `5` |
-| `norm_adv` | `true` |
-| `clip_coef` | `0.2` |
-| `clip_vloss` | `true` |
-| `ent_coef` | `0.01` |
-| `vf_coef` | `1.0` |
-| `max_grad_norm` | `1.0` |
-| `adaptive_lr` | `true` |
-| `desired_kl` | `0.01` |
-| `lr_min` | `1.0e-5` |
-| `lr_max` | `1.0e-2` |
-| `target_kl` | `0.01` |
-
 ```python
 #teacher_student_papder2.yml
 use_teacher_student: true
@@ -111,6 +87,30 @@ env_kwargs:
     undesired_contacts: 0.0
     feet_air_time_rear: 0.0
 ```
+
+## Hiperparâmetros do PPO
+
+| parâmetro | valor |
+| --- | --- |
+| `learning_rate` | `1.0e-3` |
+| `num_envs` | `4096` |
+| `num_steps` | `24` |
+| `anneal_lr` | `false` |
+| `gamma` | `0.99` |
+| `gae_lambda` | `0.95` |
+| `num_minibatches` | `4` |
+| `update_epochs` | `5` |
+| `norm_adv` | `true` |
+| `clip_coef` | `0.2` |
+| `clip_vloss` | `true` |
+| `ent_coef` | `0.01` |
+| `vf_coef` | `1.0` |
+| `max_grad_norm` | `1.0` |
+| `adaptive_lr` | `true` |
+| `desired_kl` | `0.01` |
+| `lr_min` | `1.0e-5` |
+| `lr_max` | `1.0e-2` |
+| `target_kl` | `0.01` |
 
 ## Vídeo baseline
 
@@ -244,14 +244,49 @@ onde:
   </div>
 </div>
 
-| config | valor | Métricas |
-| --- | --- | --- |
-| `sweep_ts_tracklin_0p5.yml` | `0.5` | |
-| `sweep_ts_tracklin_1p0.yml` | `1.0` | |
-| `sweep_ts_tracklin_3p0.yml` | `3.0` | |
-| `sweep_ts_tracklin_5p0.yml` | `5.0` | |
+| config | valor | comportamento | métricas |
+| --- | --- | --- | --- |
+| `sweep_ts_tracklin_0p5.yml` | `0.5` | travado, colado no chão — não anda | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/qgacg2ai?nw=nwuserluisafrancielle) |
+| `sweep_ts_tracklin_1p0.yml` | `1.0` | anda, parecido ao baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/v07pjluf?nw=nwuserluisafrancielle) |
+| `sweep_ts_tracklin_3p0.yml` | `3.0` | anda, parecido ao baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/t44xqn2s?nw=nwuserluisafrancielle) |
+| `sweep_ts_tracklin_5p0.yml` | `5.0` | anda, mas saltitante / mais esquisito | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/oianwp30?nw=nwuserluisafrancielle) |
+
+**Conclusão — `track_lin_vel_xy_exp`:** Em `1.0`,
+`1.5` (baseline) e `3.0` o robô anda parecido. A recompensa quebra nos extremos:
+em `0.5` ele **congela** ("colado no chão"); em `5.0` ele caminha meio pulando e de forma desengonçada. Ou seja,
+`track_lin` é influente, mas o robô é robusto a uma boa faixa de pesos.
 
 ## Sweep `track_ang_vel_z_exp`
+
+Recompensa de tracking de **velocidade angular (yaw)**. No baseline o comando de yaw é
+**0** (anda só pra frente), então na prática esse termo premia **manter o giro nulo** —
+andar reto, sem girar o corpo.
+
+**Registro**:
+
+```python
+"track_ang_vel_z_exp": RewTerm(
+    func=mdp.track_ang_vel_z_exp,
+    weight=weights["track_ang_vel_z_exp"],            # 0.75 no baseline TS
+    params={"command_name": "base_velocity", "std": math.sqrt(0.25)},  # std = 0.5
+)
+```
+
+**Implementação** (Isaac Lab):
+
+```python
+def track_ang_vel_z_exp(env, std, command_name, asset_cfg):
+    ang_vel_error = torch.square(command[:, 2] - root_ang_vel_b[:, 2])  # (Δω)²
+    return torch.exp(-ang_vel_error / std**2)
+```
+
+`r = exp( -(Δω)² / std² ) = exp( -4·(Δω)² )`
+
+onde:
+* `Δω = ω_comando - ω_real` (yaw), no **body frame**;
+* `std = 0.5`, então `std² = 0.25`;
+* como o comando de yaw é **0**, o termo recompensa **não girar**;
+* peso baseline = `0.75` (metade do `track_lin`).
 
 ### `track_ang_vel_z_exp = 0.25`
 
@@ -310,13 +345,47 @@ onde:
   </div>
 </div>
 
-| config | valor | Métricas |
-| --- | --- | --- |
-| `sweep_ts_trackang_0p25.yml` | `0.25` | |
-| `sweep_ts_trackang_1p5.yml` | `1.5` | |
-| `sweep_ts_trackang_3p0.yml` | `3.0` | |
+| config | valor | comportamento | métricas |
+| --- | --- | --- | --- |
+| `sweep_ts_trackang_0p25.yml` | `0.25` | | |
+| `sweep_ts_trackang_1p5.yml` | `1.5` | | |
+| `sweep_ts_trackang_3p0.yml` | `3.0` | | |
 
 ## Sweep `feet_air_time`
+
+Premia **passos marcados**: recompensa cada pé por ficar mais tempo no ar antes de tocar o
+chão. É o termo que combate o "arrastar".
+
+**Registro**:
+
+```python
+"feet_air_time": RewTerm(
+    func=feet_air_time,
+    weight=weights["feet_air_time"],                  # 1.0 no baseline TS
+    params={
+        "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*_foot"),
+        "command_name": "base_velocity",
+        "threshold": 0.5,
+    },
+)
+```
+
+**Implementação** (`go2_mdp.py`):
+
+```python
+def feet_air_time(env, sensor_cfg, command_name, threshold):
+    # tempo no ar de cada pé até o primeiro contato
+    reward = torch.sum((last_air_time - threshold) * first_contact, dim=1)
+    # zera quando o comando é ~0 (robô parado)
+    return reward * (norm(command[:, :2]) > 0.1)
+```
+
+`r = Σ_pé (t_ar - threshold) · primeiro_contato`
+
+onde:
+* premia o pé ficar **mais de `threshold` = 0.5 s** no ar antes de pousar;
+* só conta no **primeiro contato** (quando o pé toca);
+* **zera com comando ~0** (não premia bater o pé parado).
 
 ### `feet_air_time = 0.5`
 
@@ -356,12 +425,39 @@ onde:
   </div>
 </div>
 
-| config | valor | Métricas |
-| --- | --- | --- |
-| `sweep_ts_feetair_0p5.yml` | `0.5` | |
-| `sweep_ts_feetair_2p0.yml` | `2.0` | |
+| config | valor | comportamento | métricas |
+| --- | --- | --- | --- |
+| `sweep_ts_feetair_0p5.yml` | `0.5` | | |
+| `sweep_ts_feetair_2p0.yml` | `2.0` | | |
 
 ## Sweep `flat_orientation_l2`
+
+**Penalidade** de inclinação do tronco: mede o quanto o corpo está longe de nivelado —
+quanto mais inclina, mais perde.
+
+**Registro**:
+
+```python
+"flat_orientation_l2": RewTerm(
+    func=mdp.flat_orientation_l2,
+    weight=weights["flat_orientation_l2"],            # -2.0 no baseline TS
+)
+```
+
+**Implementação** (Isaac Lab):
+
+```python
+def flat_orientation_l2(env, asset_cfg):
+    # gravidade projetada no body frame: (g_x, g_y) = 0 quando nivelado
+    return torch.sum(torch.square(projected_gravity_b[:, :2]), dim=1)
+```
+
+`r = g_x² + g_y²`
+
+onde:
+* `(g_x, g_y)` = componentes horizontais da gravidade no **body frame**;
+* vale `0` com o tronco perfeitamente nivelado e cresce com a inclinação;
+* peso **negativo** (penalidade): forte demais → robô prioriza ficar plano e pode **sentar/congelar**.
 
 ### `flat_orientation_l2 = -1.0`
 
@@ -401,12 +497,36 @@ onde:
   </div>
 </div>
 
-| config | valor | Métricas |
-| --- | --- | --- |
-| `sweep_ts_flatorient_1p0.yml` | `-1.0` | |
-| `sweep_ts_flatorient_5p0.yml` | `-5.0` | |
+| config | valor | comportamento | métricas |
+| --- | --- | --- | --- |
+| `sweep_ts_flatorient_1p0.yml` | `-1.0` | | |
+| `sweep_ts_flatorient_5p0.yml` | `-5.0` | | |
 
 ## Sweep `is_alive`
+
+**Recompensa de sobrevivência**: paga um valor fixo a cada step em que o robô **não
+terminou** (não caiu / não resetou). No baseline TS está **desligada (`0.0`)** — de
+propósito, porque tende a criar o ótimo local "sobreviver parado".
+
+**Registro**:
+
+```python
+"is_alive": RewTerm(
+    func=mdp.is_alive,
+    weight=weights["is_alive"],                       # 0.0 no baseline TS
+)
+```
+
+**Implementação** (Isaac Lab):
+
+```python
+def is_alive(env):
+    return (~env.termination_manager.terminated).float()
+```
+
+onde:
+* retorna `1.0` em todo step **vivo**, `0.0` no step em que termina;
+* na **base** o baseline era `0.5`; no **TS** é `0.0` — esse contraste é o ponto central do estudo;
 
 ### `is_alive = 0.25`
 
@@ -446,9 +566,9 @@ onde:
   </div>
 </div>
 
-| config | valor | Métricas |
-| --- | --- | --- |
-| `sweep_ts_isalive_0p25.yml` | `0.25` | |
-| `sweep_ts_isalive_0p5.yml` | `0.5` | |
+| config | valor | comportamento | métricas |
+| --- | --- | --- | --- |
+| `sweep_ts_isalive_0p25.yml` | `0.25` | | |
+| `sweep_ts_isalive_0p5.yml` | `0.5` | | |
 
 ## Interpretação geral
