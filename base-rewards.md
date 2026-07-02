@@ -203,19 +203,19 @@ _"quanto mais perto do comando, mais perto de 1"_
   <div class="video-panel">
     <p><strong>tracklin_1p0</strong></p>
     <video controls preload="metadata">
-      <source src="{{ '/videos/sweep_tracklin_1p0_policy-step-499712000.mp4' | relative_url }}" type="video/mp4">
+      <source src="{{ '/videos/sweep_tracklin_1p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
     </video>
   </div>
   <div class="video-panel">
     <p><strong>tracklin_3p0</strong></p>
     <video controls preload="metadata">
-      <source src="{{ '/videos/sweep_tracklin_3p0_policy-step-499712000.mp4' | relative_url }}" type="video/mp4">
+      <source src="{{ '/videos/sweep_tracklin_3p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
     </video>
   </div>
   <div class="video-panel">
     <p><strong>tracklin_5p0</strong></p>
     <video controls preload="metadata">
-      <source src="{{ '/videos/sweep_tracklin_5p0_policy-step-499712000.mp4' | relative_url }}" type="video/mp4">
+      <source src="{{ '/videos/sweep_tracklin_5p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
     </video>
   </div>
 </div>
@@ -372,10 +372,57 @@ Kernel **L2** (sem `exp`): pune o tronco **balançar/tombar** — cabecear pra f
 
 | config | valor | razão vs baseline (-0.05) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_angvelxy_0p01.yml` | -0.01 | ÷5 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/1jpose7l?nw=nwuserimdudak) |
-| `sweep_angvelxy_0p025.yml` | -0.025 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0jeih3hj?nw=nwuserimdudak) |
-| `sweep_angvelxy_0p1.yml` | -0.1 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/zmt35egs?nw=nwuserimdudak) |
-| `sweep_angvelxy_0p2.yml` | -0.2 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/ucv9ql2c?nw=nwuserimdudak) |
+| `sweep_angvelxy_0p01.yml` | -0.01 | ÷5 | anda, mas **bem instável** — oscila muito | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/1jpose7l?nw=nwuserimdudak) |
+| `sweep_angvelxy_0p025.yml` | -0.025 | ÷2 | anda, com **problemas de equilíbrio** | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0jeih3hj?nw=nwuserimdudak) |
+| `sweep_angvelxy_0p1.yml` | -0.1 | ×2 | anda, mas **pior** que o baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/zmt35egs?nw=nwuserimdudak) |
+| `sweep_angvelxy_0p2.yml` | -0.2 | ×4 | **não anda direito** — trava sem transicionar | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/ucv9ql2c?nw=nwuserimdudak) |
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>angvelxy_0p01</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_angvelxy_0p01_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>angvelxy_0p025</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_angvelxy_0p025_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>angvelxy_0p1</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_angvelxy_0p1_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>angvelxy_0p2</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_angvelxy_0p2_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+**Resultados do sweep — dois modos de falha assimétricos:**
+
+Os vídeos deixam claro que **ambos os extremos degradam, por motivos opostos** — e que os gráficos per-step, sozinhos, *enganam*.
+
+*   **Abaixar → instabilidade** (`-0.01`, `-0.025`): sem a penalidade segurando roll/pitch, o robô **anda mas oscila**. O `0p01` (÷5) é o pior — bem instável, tronco balançando o tempo todo; o `0p025` (÷2) anda com problemas de equilíbrio visíveis. Aqui o termo está sub-dimensionado: não faz o trabalho de estabilização postural pra que ele existe. Nos gráficos, esses runs mostram `ang_vel_xy_l2` mais negativo (mais oscilação "passando") e transicionam pra caminhada **cedo** — mas a caminhada resultante é de baixa qualidade.
+
+*   **Aumentar → barreira de energia / freeze** (`-0.2`): o `0p2` (×4) simplesmente **não anda direito**. Não é rigidez que faz ele cair — é que a penalidade vira uma **barreira** que impede a transição pra caminhada. Igual ao `illegal_contact ×4`: aprender a andar exige atravessar uma fase desajeitada com bastante roll/pitch (o robô cambaleia antes de firmar o gait), e um peso ×4 torna essa fase cara demais. O PPO nunca acha que vale a pena atravessar → **trava no ótimo local "ficar de pé parado"**. O `0p1` (×2) ainda atravessa, mas a caminhada sai pior que o baseline (transição atrasada, movimento mais contido).
+
+*   **⚠️ A armadilha da métrica per-step:** quanto MAIOR o peso, "melhores" ficam os gráficos per-step de `dof_acc_l2`, `action_rate_l2`, `is_alive`, `feet_air_time` e até `lin_vel_z_l2` — todos menos negativos pro `0p2`. Já a 240M o `0p2` lidera esses cinco (ex.: `dof_torques` −0.104 vs −0.127 do `0p01`; `is_alive` 0.5000 vs 0.49994; `illegal_contact` −0.00036 vs −0.0045). É **ilusão**, o mesmo efeito do `head_contact_penalty`: o robô que quase não se mexe tem métricas per-step lindas — não cai, não gasta torque em manobra, não acelera junta nenhuma. Os runs que **de fato andam** (pesos menores) pagam o pedágio: `is_alive` cai na transição, `dof_acc`/`action_rate` sobem porque movimento real custa. **Per-step premia quem desiste da tarefa.**
+
+*   **A métrica honesta confirma a conformidade:** o gráfico que importa — `eval/reward_terms/track_lin_vel_xy_exp` (tracking episódico acumulado, a tarefa de fato) — coloca o `0p2` **em último, disparado** (satura em ~200 enquanto `0p01`/`0p025` sobem pra ~450 depois de 400M). Não há paradoxo: a única métrica que não dá pra "hackear ficando parado" ordena as configs como o vídeo mostra. **Regra prática: julgue o sweep pelo `track_lin_vel_xy_exp`, não pelos termos de penalidade per-step.**
+
+*   **Contraprova via tamanho de episódio (o dado que fecha):** em `charts/num_episodes`, o `0p2` tem **menos** episódios (~1.2M vs ~1.7M dos outros) → episódios **mais longos** → ele fica de pé até o timeout sem cair. Isso *infla* toda métrica acumulada por episódio (por isso `is_alive` e `track_ang_vel_z` episódicos do `0p2` parecem altos). Mesmo com essa vantagem de episódio comprido, o `track_lin_vel_xy_exp` dele continua no chão — ou seja, **mesmo tendo mais tempo pra somar reward de tracking, ele não soma, porque não avança.** É a prova irrefutável do freeze.
+
+*   **O outro extremo cobra em estabilidade, não em tracking:** o `0p01` (÷5) e o `0p025` (÷2) têm o **melhor** `track_lin_vel_xy_exp` episódico — comprometem-se com a caminhada cedo e andam rápido. Mas pagam onde o `ang_vel_xy_l2` deveria proteger: são os **piores** em `fall_penalty` e `illegal_contact_penalty` per-step (`0p01`: fall −0.035, illegal −0.0045; ~8× e ~5× o baseline), batendo exatamente com o cambaleio/desequilíbrio do vídeo. Andam bem, mas caem e batem a base mais. O baseline (-0.05) troca um pouco de tracking bruto por essa estabilidade — anda controlado.
+
+*   **Por que roll/pitch são críticos, não cosméticos:** diferente de termos de ajuste fino (`dof_torques`, `action_rate`), o `ang_vel_xy_l2` regula uma **ferramenta de equilíbrio ativo**. O tronco precisa balançar *um pouco* pra fazer as transições de apoio dos pés durante a passada. Zerar isso (peso alto) mata a caminhada; liberar demais (peso baixo) deixa o balanço virar cambaleio. Não há platô confortável no meio — por isso a janela é estreita.
+
+**Conclusão — `ang_vel_xy_l2`:** janela **muito estreita**, baseline (-0.05) no ponto ótimo, com **dois modos de falha simétricos em sintoma mas opostos em causa**. Sub-peso (`≤ -0.025`): anda **rápido mas instável** — melhor tracking bruto, pior taxa de quedas/contatos (o termo não faz o trabalho de estabilizar). Sobre-peso (`-0.1` → `-0.2`): caminhada pior evoluindo pra **freeze total** — mesma barreira de energia do `illegal_contact ×4`, onde a fase desajeitada (cambaleio necessário pra aprender) fica cara demais e o PPO nunca atravessa. O caso é um **alerta metodológico duplo**: (1) as métricas per-step de suavidade/sobrevivência *melhoram* monotonicamente com o peso justamente porque o robô abandona a tarefa; (2) métricas episódicas acumuladas são infladas por episódios mais longos do robô parado. As duas conspiram pra fazer o `-0.2` parecer a melhor config no dashboard. Só o `track_lin_vel_xy_exp` — a métrica que não dá pra hackear ficando parado — e o vídeo revelam a verdade.
 
 ### dof\_torques\_l2
 **Registro** (_go2\_env\_cfg.py:351_):
@@ -427,10 +474,26 @@ Pune o **esforço** das juntas (soma dos torques ao quadrado). Incentiva movimen
 
 | config | valor | razão vs baseline (-0.0002) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_doftorq_5e5.yml` | -5e-5 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0q4tw2q7?nw=nwuserimdudak) |
-| `sweep_doftorq_1e4.yml` | -1e-4 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/7g0axmhg?nw=nwuserimdudak) |
-| `sweep_doftorq_4e4.yml` | -4e-4 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/66zhilrw?nw=nwuserimdudak) |
-| `sweep_doftorq_8e4.yml` | -8e-4 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/ull21yky?nw=nwuserimdudak) |
+| `sweep_doftorq_5e5.yml` | -5e-5 | ÷4 | anda, mas **treme mais** que o baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0q4tw2q7?nw=nwuserimdudak) |
+| `sweep_doftorq_1e4.yml` | -1e-4 | ÷2 | anda, mas **treme mais** que o baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/7g0axmhg?nw=nwuserimdudak) |
+| `sweep_doftorq_4e4.yml` | -4e-4 | ×2 | **mal caminha** — tomba pra trás, cai às vezes | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/66zhilrw?nw=nwuserimdudak) |
+| `sweep_doftorq_8e4.yml` | -8e-4 | ×4 | **não anda** — sem torque pra levantar, tomba pra trás | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/ull21yky?nw=nwuserimdudak) |
+
+**Resultados do sweep — fome de torque (mecanismo diferente do `ang_vel_xy`):**
+
+Aqui o modo de falha do peso alto **não é barreira de energia** — é **starvation de atuação**. O `dof_torques_l2` limita diretamente quanta "força muscular" a política pode gastar. Peso alto demais e o robô fica literalmente **fraco demais pra se levantar** e executar o gait.
+
+*   **Abaixar → tremor** (`-5e-5`, `-1e-4`): ambos **andam**, mas **tremem mais que o baseline** — exatamente o efeito esperado. Com torque barato, a política usa picos agressivos de força, gerando movimento nervoso de alta frequência. Nos gráficos, esses runs têm `dof_torques_l2` per-step **mais negativo** (gasto real de torque maior) e `dof_acc_l2` per-step também mais negativo (juntas acelerando/desacelerando bruscamente — a assinatura do tremor). O termo está sub-dimensionado: cumpre o tracking, mas não faz o trabalho de **suavizar** pra que ele existe.
+
+*   **Aumentar → fraqueza e tombo pra trás** (`-4e-4`, `-8e-4`): o `4e-4` (×2) **mal caminha** — dá alguns passos, tomba pra trás e cai às vezes; o `8e-4` (×4) **não anda**. O `flat_orientation_l2` per-step delata o mecanismo: o `8e-4` fica preso no valor **mais tilt-ado** (~−0.06, o pior de todos) o run inteiro, enquanto os que andam sobem rumo a ~−0.01 (tronco nivela). Tronco permanentemente inclinado pra trás = robô que não consegue estender quadril/joelho contra a gravidade porque o torque necessário é caro demais → **senta e tomba pra trás**. É "capability starvation": a penalidade corta o orçamento de força abaixo do mínimo físico pra andar.
+
+*   **⚠️ A armadilha da métrica per-step (de novo):** o `8e-4` tem os **melhores** `dof_acc_l2`, `action_rate_l2`, `is_alive`, `head_contact_penalty` e `feet_slide` per-step — `is_alive` colado em 0.5 (nunca cai porque nunca arrisca), `head_contact` ~0 (nunca cabeceia porque não anda). Ilusão idêntica à do `ang_vel_xy`: o robô torque-starved fica quieto de pé e todas as métricas de suavidade/sobrevivência ficam lindas. **Não é bom — é imóvel.**
+
+*   **A métrica honesta confirma a ordem:** `track_lin_vel_xy_exp` (per-step e episódico) coloca o `4e-4` como **laggard claro** — satura em ~0.6 no per-step enquanto os que andam alcançam ~1.25 — e o `8e-4` também travado baixo. A tarefa não dá pra hackear ficando fraco de pé: quem não gera torque não avança, e o gráfico mostra isso limpo.
+
+*   **Contraste de mecanismo com `ang_vel_xy` e `illegal_contact`:** naqueles, o peso alto criava uma **barreira de risco** — o robô *poderia* andar mas o PPO calculava que não valia a pena atravessar a fase feia. Aqui é **físico**: mesmo que quisesse, o robô *não tem torque* pra levantar. Por isso o sintoma é tombo pra trás (colapso postural passivo), não freeze-de-pé-estável. Dois caminhos diferentes pro mesmo resultado macroscópico ("não anda"), distinguíveis pelo `flat_orientation_l2` (tilt alto aqui vs nivelado no freeze puro).
+
+**Conclusão — `dof_torques_l2`:** janela segura de **−5e-5 a −2e-4** (baseline), com trade-off claro: quanto mais baixo, mais tremor (mas anda); baseline é o melhor equilíbrio suavidade×capacidade. A partir de **−4e-4** o robô começa a ficar fraco demais (mal caminha, tomba pra trás) e em **−8e-4** a atuação é insuficiente pra locomoção. O modo de falha é **starvation de torque** (fraqueza física, tombo pra trás), não barreira de energia — diagnosticável pelo `flat_orientation_l2` travado no tilt máximo. E confirma pela terceira vez o alerta metodológico: as métricas per-step de suavidade premiam o robô fraco-e-parado; só o `track_lin_vel_xy_exp` e o vídeo distinguem "suave porque bom" de "suave porque imóvel".
 
 ### dof\_acc\_l2
 **Registro** (_go2\_env\_cfg.py:352_):
@@ -710,7 +773,7 @@ Pune contato em partes que **não deveriam** tocar o chão (ex.: coxas). Força 
   <div class="video-panel">
     <p><strong>undesired_0p05</strong></p>
     <video controls preload="metadata">
-      <source src="{{ '/videos/sweep_undesired_0p05_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+      <source src="{{ '/videos/sweep_undesired_0p05_policy-step-499712000.mp4' | relative_url }}" type="video/mp4">
     </video>
   </div>
   <div class="video-panel">
@@ -722,13 +785,13 @@ Pune contato em partes que **não deveriam** tocar o chão (ex.: coxas). Força 
   <div class="video-panel">
     <p><strong>undesired_0p4</strong></p>
     <video controls preload="metadata">
-      <source src="{{ '/videos/sweep_undesired_0p4_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+      <source src="{{ '/videos/sweep_undesired_0p4_policy-step-499712000.mp4' | relative_url }}" type="video/mp4">
     </video>
   </div>
   <div class="video-panel">
     <p><strong>undesired_0p8</strong></p>
     <video controls preload="metadata">
-      <source src="{{ '/videos/sweep_undesired_0p8_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+      <source src="{{ '/videos/sweep_undesired_0p8_policy-step-499712000.mp4' | relative_url }}" type="video/mp4">
     </video>
   </div>
 </div>
