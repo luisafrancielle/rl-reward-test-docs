@@ -323,6 +323,25 @@ onde:
   </div>
 </div>
 
+### `track_ang_vel_z_exp = 1.0`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-teacher-trackang_1p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-student-trackang_1p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
 ### `track_ang_vel_z_exp = 3.0`
 
 <div class="video-pair">
@@ -345,6 +364,7 @@ onde:
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
 | `sweep_ts_trackang_0p25.yml` | `0.25` | não anda — cai de lado | |
+| `sweep_ts_trackang_1p0.yml` | `1.0` | | |
 | `sweep_ts_trackang_1p5.yml` | `1.5` | não anda — trava no chão — | |
 | `sweep_ts_trackang_3p0.yml` | `3.0` | não anda - trava no chão, uma pata da frente levantada | |
 
@@ -520,17 +540,45 @@ onde:
   </div>
 </div>
 
+### `flat_orientation_l2 = -3.0`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-flatorient_3p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-flatorient_3p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_flatorient_0p25.yml` | `-0.25` | | |
-| `sweep_ts_flatorient_1p0.yml` | `-1.0` | | |
-| `sweep_ts_flatorient_5p0.yml` | `-5.0` | | |
+| `sweep_ts_flatorient_0p25.yml` | `-0.25` | não anda — cai de lado e trava no chão | |
+| `sweep_ts_flatorient_1p0.yml` | `-1.0` | não anda — trava no chão (uma pata levantada) | |
+| `sweep_ts_flatorient_3p0.yml` | `-3.0` | | |
+| `sweep_ts_flatorient_5p0.yml` | `-5.0` | não anda — trava prostrado, 4 patas no chão | |
+
+**Conclusão — `flat_orientation_l2`:** igual ao `track_ang`, tem **janela estreita** em torno
+do baseline (`-2.0`): tanto **mais fraco** (`-0.25`, `-1.0`) quanto **mais forte** (`-5.0`)
+quebram a marcha. Fraco demais → sem controle de postura, o robô **cai de lado e trava**;
+forte demais → punir *qualquer* inclinação faz o melhor ser **deitar plano no chão** (corpo
+nivelado = penalidade mínima), então ele **trava prostrado** com as 4 patas no chão. Só o
+`-2.0` equilibra. É outro exemplo de recompensa **sensível** no TS (contraste com o
+`track_lin`, de faixa ampla). Falta testar `-3.0` p/ mapear a borda entre `-2.0` (anda) e
+`-5.0` (prostra).
 
 ## Sweep `is_alive`
 
 **Recompensa de sobrevivência**: paga um valor fixo a cada step em que o robô **não
-terminou** (não caiu / não resetou). No baseline TS está **desligada (`0.0`)** — de
-propósito, porque tende a criar o ótimo local "sobreviver parado".
+terminou** (não caiu / não resetou).
 
 **Registro**:
 
@@ -604,6 +652,33 @@ sincronizado.
 Penaliza mudanças bruscas entre ações consecutivas. O peso é negativo: quanto maior a
 magnitude, mais a política é pressionada a suavizar os comandos.
 
+**Registro**:
+
+```python
+"action_rate_l2": RewTerm(
+    func=mdp.action_rate_l2,
+    weight=weights["action_rate_l2"],            # -0.01 no baseline TS
+)
+```
+
+**Implementação** (Isaac Lab):
+
+```python
+def action_rate_l2(env):
+    # penaliza a diferença entre a ação atual e a anterior
+    return torch.sum(
+        torch.square(env.action_manager.action - env.action_manager.prev_action),
+        dim=1,
+    )
+```
+
+`r = Σ (aₜ - aₜ₋₁)²`
+
+onde:
+* mede o quanto as ações mudam de um step para o outro;
+* penalidade (peso negativo): pune ações bruscas → incentiva movimento **suave**;
+* forte demais → a política fica **lenta/travada** e não consegue corrigir a passada a tempo.
+
 ### `action_rate_l2 = -0.02`
 
 <div class="video-pair">
@@ -619,6 +694,25 @@ magnitude, mais a política é pressionada a suavizar os comandos.
 
     <video controls preload="metadata">
       <source src="{{ '/videos/policy-step-280068096-student-actionrate_0p002.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `action_rate_l2 = -0.015`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-teacher-actionrate_0p015.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-student-actionrate_0p015.mp4' | relative_url }}" type="video/mp4">
     </video>
   </div>
 </div>
@@ -644,13 +738,44 @@ magnitude, mais a política é pressionada a suavizar os comandos.
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_actionrate_0p02.yml` | `-0.02` | | |
-| `sweep_ts_actionrate_0p05.yml` | `-0.05` | | |
+| `sweep_ts_actionrate_0p015.yml` | `-0.015` | | |
+| `sweep_ts_actionrate_0p02.yml` | `-0.02` | não anda — dá um passo e cai para frente | |
+| `sweep_ts_actionrate_0p05.yml` | `-0.05` | não anda — dá um passo e cai para frente (igual) | |
+
+**Conclusão — `action_rate_l2`:** o baseline (`-0.01`) anda; subir a penalidade já em `-0.02`
+quebra a marcha — o robô **dá um passo e cai para frente** (e `-0.05` é igual). Faz sentido:
+punir demais a *mudança* de ação deixa a política **lenta/travada**, incapaz das correções
+rápidas que a passada exige, então ela dá um passo e não se recupera. Como `-0.02` já falha
+(logo acima do baseline), a **borda superior é apertada**.
 
 ## Sweep `dof_torques_l2`
 
 Penaliza esforço de torque nas juntas. O peso é negativo: aumentar a magnitude tende a
 favorecer movimentos mais econômicos, mas pode tirar força da locomoção.
+
+**Registro**:
+
+```python
+"dof_torques_l2": RewTerm(
+    func=mdp.joint_torques_l2,
+    weight=weights["dof_torques_l2"],            # -0.0002 no baseline TS
+)
+```
+
+**Implementação** (Isaac Lab):
+
+```python
+def joint_torques_l2(env, asset_cfg):
+    # soma dos torques aplicados nas juntas, ao quadrado
+    return torch.sum(torch.square(asset.data.applied_torque), dim=1)
+```
+
+`r = Σ τ²`
+
+onde:
+* soma dos torques de todas as juntas ao quadrado;
+* penalidade (peso negativo): pune usar muito torque → movimento mais **econômico**;
+* fraco demais → torque "barato", passadas largas/agressivas; forte demais → não levanta/move direito.
 
 ### `dof_torques_l2 = -0.0001`
 
@@ -690,15 +815,67 @@ favorecer movimentos mais econômicos, mas pode tirar força da locomoção.
   </div>
 </div>
 
+### `dof_torques_l2 = -0.0003`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-teacher-torques_3em4.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-student-torques_3em4.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_torques_1em4.yml` | `-0.0001` | | |
-| `sweep_ts_torques_4em4.yml` | `-0.0004` | | |
+| `sweep_ts_torques_1em4.yml` | `-0.0001` | não anda — passadas muito largas e cai | |
+| `sweep_ts_torques_3em4.yml` | `-0.0003` | | |
+| `sweep_ts_torques_4em4.yml` | `-0.0004` | não anda — trava no chão | |
+
+**Conclusão — `dof_torques_l2`:** mais um termo de **janela estreita** em torno do baseline
+(`-0.0002`), como o `track_ang` e o `flat_orientation`. Fraco demais (`-0.0001`) → o torque
+fica "barato", o robô dá **passadas muito largas** e agressivas e **cai**; forte demais
+(`-0.0004`) → economizar torque vira prioridade, ele quase não se move e **trava no chão**.
+Só o `-0.0002` equilibra. Falta testar `-0.0003` p/ mapear a borda entre `-0.0002` (anda) e
+`-0.0004` (trava).
 
 ## Sweep `fall_penalty`
 
 Penaliza episódios que terminam em queda/reset. Peso mais negativo aumenta o custo de cair;
 com peso zero, a queda deixa de ser punida diretamente por esse termo.
+
+**Registro**:
+
+```python
+"fall_penalty": RewTerm(
+    func=mdp.is_terminated_term,
+    weight=weights["fall_penalty"],              # -1.0 no baseline TS
+    params={"term_keys": "robot_fell"},
+)
+```
+
+**Implementação** (Isaac Lab):
+
+```python
+def is_terminated_term(env, term_keys):
+    # 1.0 no step em que a terminação indicada dispara (aqui: robot_fell, altura < 0.1)
+    return env.termination_manager.get_term(term_keys).float()
+```
+
+`r = 1 no step em que o robô cai (senão 0)`
+
+onde:
+* dispara **uma vez**, no step da queda (terminação `robot_fell`);
+* penalidade (peso negativo): dá um custo pontual a cair;
+* no baseline TS = `-1.0`.
 
 ### `fall_penalty = 0.0`
 
@@ -738,6 +915,25 @@ com peso zero, a queda deixa de ser punida diretamente por esse termo.
   </div>
 </div>
 
+### `fall_penalty = -1.5`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-fall_1p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-fall_1p5.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
 ### `fall_penalty = -4.0`
 
 <div class="video-pair">
@@ -759,8 +955,92 @@ com peso zero, a queda deixa de ser punida diretamente por esse termo.
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_fall_0p0.yml` | `0.0` | | |
-| `sweep_ts_fall_2p0.yml` | `-2.0` | | |
-| `sweep_ts_fall_4p0.yml` | `-4.0` | | |
+| `sweep_ts_fall_0p0.yml` | `0.0` | anda (sem punição de queda) | |
+| `sweep_ts_fall_1p5.yml` | `-1.5` | | |
+| `sweep_ts_fall_2p0.yml` | `-2.0` | não anda — cruza as patas e cai | |
+| `sweep_ts_fall_4p0.yml` | `-4.0` | não anda — cai para frente | |
+
+**Conclusão — `fall_penalty`:** sensibilidade **de um lado só** — o robô anda tanto em `0.0`
+(sem punição!) quanto no baseline `-1.0`; só quebra quando a penalidade fica **forte**
+(`-2.0`: cruza as patas e cai; `-4.0`: cai para frente). Mecanismo provável: um custo terminal
+grande cria uma **descontinuidade forte no valor** no instante da queda, o que desestabiliza a
+estimativa de vantagem perto da "borda de cair" e leva a marchas estranhas. Detalhe importante:
+o TS anda **até com `fall_penalty = 0`** — não precisa da punição de queda pra aprender a andar
+(paralelo com o `is_alive`, que também não é necessário no TS). A borda fica entre `-1.0` (anda)
+e `-2.0` (quebra).
+
+## Sweep `feet_slide`
+
+Penaliza os pés escorregando durante contato com o chão. Peso negativo maior tende a
+desencorajar arrasto lateral dos pés.
+
+### `feet_slide = -0.25`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-260014080-teacher-feetslide_0p25.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-260014080-student-feetslide_0p25.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | comportamento | métricas |
+| --- | --- | --- | --- |
+| `sweep_ts_feetslide_0p25.yml` | `-0.25` | | |
 
 ## Interpretação geral
+
+Rodando cada recompensa isolada (OFAT) em torno do baseline, surgiu um padrão claro: as
+recompensas têm **sensibilidades bem diferentes**, e o **jeito como o robô falha** (a
+"assinatura das patas") diz *por que* cada uma quebra.
+
+### Assinaturas de falha (o que as patas fazem)
+
+| recompensa | falha | assinatura das patas |
+| --- | --- | --- |
+| `track_ang` alto | trava | 1 pata da frente levantada |
+| `flat_orientation` -5.0 | prostra | 4 patas no chão, corpo plano |
+| `dof_torques` -0.0001 | cai | passadas largas / agressivas |
+| `dof_torques` -0.0004 | trava | quase não move |
+| `fall_penalty` -2.0 | cai | **cruza as patas** |
+| `fall_penalty` -4.0 | cai | tomba pra frente |
+| `is_alive` 0.5 | anda | galope sincronizado |
+| `is_alive` 0.25 | anda | patas soltas, assimétricas |
+
+Padrão: penalidade **forte demais** → o robô **congela / prostra** (minimiza o termo ficando
+parado); incentivo **fraco demais** → **movimento sem controle** (passada larga, cruza patas, cai).
+
+### Classes de sensibilidade
+
+| recompensa | tipo | faixa que anda | observação |
+| --- | --- | --- | --- |
+| `track_lin` | tarefa (+) | ampla (~1.0–3.0) | quebra só nos extremos (0.5 congela, 5.0 saltita) |
+| `track_ang` | tarefa (+) | estreita (~0.75) | qualquer lado quebra |
+| `flat_orientation` | regularização (−) | estreita (~-2.0) | qualquer lado quebra |
+| `dof_torques` | regularização (−) | estreita (~-0.0002) | qualquer lado quebra |
+| `action_rate` | regularização (−) | borda superior apertada | -0.02 já cai |
+| `is_alive` | sobrevivência (+) | não quebra (0–0.5) | só muda a coordenação |
+| `fall_penalty` | sobrevivência (−) | tolera fraco/0, quebra forte | -2.0 cruza as patas |
+
+### O que isso sugere
+
+- As **penalidades de regularização** (torque, orientação, yaw) são as **mais sensíveis** no
+  TS — janelas estreitas. Provável causa: o **domain randomization** obriga o robô a operar
+  numa faixa dinâmica larga (fricção 0.05–4.0, massas variadas); penalidade forte demais nessa
+  condição empurra pro "trava/prostra", e fraca demais deixa o movimento descontrolado.
+- As recompensas de **sobrevivência** (`is_alive`, `fall_penalty`) são **dispensáveis** no TS —
+  ele anda com elas em `0`. Difere da **base**, onde o `is_alive` era importante. Hipótese: o
+  teacher tem o **latente privilegiado** (a física real), então aprende a andar sem essas muletas.
+- O `track_lin` (a recompensa da tarefa em si) é o mais **robusto** — faz sentido, é o objetivo.
+
+Ou seja: os mesmos pesos da base não transferem porque o **problema é outro** (DR + latente +
+otimizador), e cada termo reage diferente a essa mudança.
