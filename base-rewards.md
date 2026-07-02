@@ -384,6 +384,40 @@ onde:
 
 Pune o **esforço** das juntas (soma dos torques ao quadrado). Incentiva movimento mais **econômico e suave**. Alto demais deixa o robô "frouxo" (não levanta direito / freia a aceleração); baixo demais libera torque e aparece tremor e gasto de energia.
 
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>doftorq_5e5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_doftorq_5e5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>doftorq_1e4</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_doftorq_1e4_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>doftorq_4e4</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_doftorq_4e4_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>doftorq_8e4</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_doftorq_8e4_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (-0.0002) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_doftorq_5e5.yml` | -5e-5 | ÷4 | | [wandb]() |
+| `sweep_doftorq_1e4.yml` | -1e-4 | ÷2 | | [wandb]() |
+| `sweep_doftorq_4e4.yml` | -4e-4 | ×2 | | [wandb]() |
+| `sweep_doftorq_8e4.yml` | -8e-4 | ×4 | | [wandb]() |
+
 ### dof\_acc\_l2
 **Registro** (_go2\_env\_cfg.py:352_):
 
@@ -405,6 +439,40 @@ onde:
 
 Pune **mudanças bruscas** de velocidade articular → é o alvo direto do **tremor de alta frequência**. Alto deixa as juntas mais suaves porém com reação mais lenta; baixo permite movimento nervoso/tremido.
 
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>dofacc_6p25e8</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_dofacc_6p25e8_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>dofacc_1p25e7</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_dofacc_1p25e7_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>dofacc_5e7</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_dofacc_5e7_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>dofacc_1e6</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_dofacc_1e6_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (-2.5e-7) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_dofacc_6p25e8.yml` | -6.25e-8 | ÷4 | | [wandb]() |
+| `sweep_dofacc_1p25e7.yml` | -1.25e-7 | ÷2 | | [wandb]() |
+| `sweep_dofacc_5e7.yml` | -5e-7 | ×2 | | [wandb]() |
+| `sweep_dofacc_1e6.yml` | -1e-6 | ×4 | | [wandb]() |
+
 ### action\_rate\_l2
 **Registro** (_go2\_env\_cfg.py:353_):
 
@@ -425,6 +493,40 @@ onde:
 *   peso **−0.01**
 
 Suaviza a **saída da política** (não a física direta): pune comandos que pulam de um step pro outro. Diferente do `dof_acc_l2`, atua **antes** da dinâmica. Alto deixa a política menos responsiva; baixo permite ações oscilando passo-a-passo → tremor.
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>actrate_0p0025</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_actrate_0p0025_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>actrate_0p005</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_actrate_0p005_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>actrate_0p02</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_actrate_0p02_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>actrate_0p04</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_actrate_0p04_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (-0.01) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_actrate_0p0025.yml` | -0.0025 | ÷4 | | [wandb]() |
+| `sweep_actrate_0p005.yml` | -0.005 | ÷2 | | [wandb]() |
+| `sweep_actrate_0p02.yml` | -0.02 | ×2 | | [wandb]() |
+| `sweep_actrate_0p04.yml` | -0.04 | ×4 | | [wandb]() |
 
 ### feet\_air\_time
 **Registro** (_go2\_env\_cfg.py:354_):
@@ -461,6 +563,40 @@ onde:
 
 Incentiva **passadas marcadas** (pé fica mais de 0.5 s no ar) em vez de arrastar/pisar miúdo. Alto demais pode virar "marcha no lugar"/saltitar pra farmar tempo de ar; baixo demais → passada curta e arrasto.
 
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>feetair_0p125</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_feetair_0p125_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>feetair_0p25</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_feetair_0p25_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>feetair_1p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_feetair_1p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>feetair_2p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_feetair_2p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (0.5) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_feetair_0p125.yml` | 0.125 | ÷4 | | [wandb]() |
+| `sweep_feetair_0p25.yml` | 0.25 | ÷2 | | [wandb]() |
+| `sweep_feetair_1p0.yml` | 1.0 | ×2 | | [wandb]() |
+| `sweep_feetair_2p0.yml` | 2.0 | ×4 | | [wandb]() |
+
 ### feet\_slide
 **Registro** (_go2\_env\_cfg.py:401_):
 
@@ -490,6 +626,40 @@ onde:
 *   peso **−0.25**
 
 Pune o pé **escorregar enquanto apoia** — é o fix estrutural do arrasto: torna o pé deslizando custoso independente da magnitude do comando. Alto "crava" o pé no chão (marcha limpa, porém pode enrijecer/frear); baixo permite arrastar → deriva e desgaste.
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>feetslide_0p0625</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_feetslide_0p0625_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>feetslide_0p125</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_feetslide_0p125_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>feetslide_0p5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_feetslide_0p5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>feetslide_1p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_feetslide_1p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (-0.25) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_feetslide_0p0625.yml` | -0.0625 | ÷4 | | [wandb]() |
+| `sweep_feetslide_0p125.yml` | -0.125 | ÷2 | | [wandb]() |
+| `sweep_feetslide_0p5.yml` | -0.5 | ×2 | | [wandb]() |
+| `sweep_feetslide_1p0.yml` | -1.0 | ×4 | | [wandb]() |
 
 ### undesired\_contacts
 **Registro** (_go2\_env\_cfg.py:372_):
@@ -521,6 +691,40 @@ onde:
 *   peso **−0.2**
 
 Pune contato em partes que **não deveriam** tocar o chão (ex.: coxas). Força apoiar só nas **patas** (postura correta). Alto pode deixar o robô cauteloso/lento; baixo tolera contatos espúrios (se apoiar errado/"ajoelhar").
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>undesired_0p05</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_undesired_0p05_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>undesired_0p1</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_undesired_0p1_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>undesired_0p4</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_undesired_0p4_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>undesired_0p8</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_undesired_0p8_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (-0.2) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_undesired_0p05.yml` | -0.05 | ÷4 | | [wandb]() |
+| `sweep_undesired_0p1.yml` | -0.1 | ÷2 | | [wandb]() |
+| `sweep_undesired_0p4.yml` | -0.4 | ×2 | | [wandb]() |
+| `sweep_undesired_0p8.yml` | -0.8 | ×4 | | [wandb]() |
 
 ### illegal\_contact\_penalty
 **Registro** (_go2\_env\_cfg.py:380_):
@@ -620,6 +824,40 @@ onde:
 
 Define o quanto **cair** custa. Alto demais → cauteloso demais, trava num ótimo local "não arrisca"; baixo demais → aceita quedas em troca de velocidade. Compete com o `is_alive` (bônus de sobreviver).
 
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>fall_0p5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_fall_0p5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>fall_1p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_fall_1p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>fall_4p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_fall_4p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>fall_8p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_fall_8p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (-2.0) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_fall_0p5.yml` | -0.5 | ÷4 | | [wandb]() |
+| `sweep_fall_1p0.yml` | -1.0 | ÷2 | | [wandb]() |
+| `sweep_fall_4p0.yml` | -4.0 | ×2 | | [wandb]() |
+| `sweep_fall_8p0.yml` | -8.0 | ×4 | | [wandb]() |
+
 ### head\_contact\_penalty
 **Registro** (_go2\_env\_cfg.py:390_):
 
@@ -647,6 +885,40 @@ onde:
 
 Protege contra **mergulhar a frente do corpo** (cabeçada/tombo pra frente). Alto mantém a cabeça erguida (pode travar/cauteloso); baixo tolera abaixar demais a frente.
 
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>head_0p25</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_head_0p25_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>head_0p5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_head_0p5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>head_2p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_head_2p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>head_4p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_head_4p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (-1.0) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_head_0p25.yml` | -0.25 | ÷4 | | [wandb]() |
+| `sweep_head_0p5.yml` | -0.5 | ÷2 | | [wandb]() |
+| `sweep_head_2p0.yml` | -2.0 | ×2 | | [wandb]() |
+| `sweep_head_4p0.yml` | -4.0 | ×4 | | [wandb]() |
+
 ### flat\_orientation\_l2
 **Registro** (_go2\_env\_cfg.py:399_):
 
@@ -667,6 +939,40 @@ onde:
 *   peso **−0.25**
 
 Pune o tronco **inclinado**. Alto força postura horizontal (estável, mas pode impedir inclinar pra acelerar/virar); baixo libera o balanço do corpo (mais ágil porém pode cabecear/tombar). Relaciona-se com `head_contact_penalty` e `ang_vel_xy_l2`.
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>flatorient_0p0625</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_flatorient_0p0625_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>flatorient_0p125</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_flatorient_0p125_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>flatorient_0p5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_flatorient_0p5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>flatorient_1p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_flatorient_1p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (-0.25) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_flatorient_0p0625.yml` | -0.0625 | ÷4 | | [wandb]() |
+| `sweep_flatorient_0p125.yml` | -0.125 | ÷2 | | [wandb]() |
+| `sweep_flatorient_0p5.yml` | -0.5 | ×2 | | [wandb]() |
+| `sweep_flatorient_1p0.yml` | -1.0 | ×4 | | [wandb]() |
 
 ## hiperparâmetros
 ### learning\_rate
