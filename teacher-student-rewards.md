@@ -1078,7 +1078,7 @@ desencorajar arrasto lateral dos pés.
 Rodando cada recompensa isolada em torno do baseline, surgiu um padrão: as
 recompensas têm sensibilidades bem diferentes, e o jeito como o robô falha diz por que cada uma quebra.
 
-### Assinaturas de falha (o que as patas fazem)
+### O que as patas fazem
 
 | recompensa | falha | assinatura das patas |
 | --- | --- | --- |
@@ -1108,8 +1108,8 @@ parado); incentivo fraco demais → movimento sem controle (passada larga, cruza
 
 ### O que isso sugere
 
-- As*penalidades de regularização (torque, orientação, yaw) são as mais sensíveis no
-  TS — janelas estreitas. Provável causa: o **domain randomization** obriga o robô a operar
+- As penalidades de regularização (torque, orientação, yaw) são as mais sensíveis no
+  TS — janelas estreitas. Provável causa: o domain randomization obriga o robô a operar
   numa faixa dinâmica larga (fricção 0.05–4.0, massas variadas); penalidade forte demais nessa
   condição empurra pro trava/prostra, e fraca demais deixa o movimento descontrolado.
 - As recompensas de sobrevivência (`is_alive`, `fall_penalty`) são dispensáveis no TS —
