@@ -549,6 +549,49 @@ onde:
 
 Define o quanto **deitar a base no chão** "dói". Alto demais → conservador/parado; baixo → ignora colisões da base.
 
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>illegal_0p25</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_illegal_0p25_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>illegal_0p5</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_illegal_0p5_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>illegal_2p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_illegal_2p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>illegal_4p0</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/sweep_illegal_4p0_policy-step-999424000.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | razão vs baseline (-1.0) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_illegal_0p25.yml` | -0.25 | ÷4 | anda, igual ao baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/wie86kph) |
+| `sweep_illegal_0p5.yml` | -0.5 | ÷2 | anda, igual ao baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/vj89knrv) |
+| `sweep_illegal_2p0.yml` | -2.0 | ×2 | anda, mas pior — transição atrasa ~250M steps | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/sveaysll) |
+| `sweep_illegal_4p0.yml` | -4.0 | ×4 | **não anda** — fica no ótimo local "sobreviver parado" | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0sbtyyry) |
+
+**Resultados do sweep — o efeito é assimétrico:**
+
+*   **Abaixar é inócuo** (`-0.25`, `-0.5`): curvas praticamente idênticas ao baseline em todos os termos. Faz sentido: pra uma política que já anda bem, a base tocar o chão é evento **raro** — o termo quase não dispara, então o peso dele pouco importa nessa direção.
+*   **Aumentar atrasa ou impede a transição pra andar.** A "transição de fase" (~500–600M no baseline, visível no `track_lin_vel_xy_exp` saturando em ~1.25, no `is_alive` caindo de 0.4998→0.4992 e no `episodic_acc_length` caindo de ~700→~430) acontece **~250M mais tarde** no `-2.0` (só ~800M) e **nunca acontece** no `-4.0` dentro de 1B steps.
+*   **O `-4.0` trava no ótimo local covarde**: `track_lin_vel` preso em ~0.25, episódio colado no teto (~700 = timeout, nunca cai), `illegal_contact_penalty` que espetava até −0.4/step no início (peso ×4 amplifica cada término) zera de vez — a política elimina o risco **parando de tentar andar**. A `entropy` fica sistematicamente mais alta (~10–11 vs ~8) — nunca converge pra um gait — e o `dof_torques_l2` mais negativo mostra que gasta torque "se remexendo" sem sair do lugar.
+*   **Quem anda paga um pedágio terminal**: depois da transição, os runs que andam acumulam `head_contact_penalty` (~−0.6/step no eval) e episódios mais curtos — andar rápido traz términos ocasionais. É exatamente esse pedágio que o `-4.0` torna caro demais: o custo esperado de tentar andar supera o ganho de tracking, e "ficar parado vivo" vence.
+
+**Conclusão — `illegal_contact_penalty`:** janela segura de **−0.25 a −1.0** (indiferente); a partir de **−2.0** começa a competir com a tarefa e em **−4.0** domina. O peso funciona como uma **barreira de energia** pra transição: aprender a andar exige atravessar uma fase intermediária desajeitada em que a base toca o chão com frequência — e é exatamente essa fase que a penalidade taxa. Quanto maior o peso, mais caro o "vale" entre parado-estável e andando-estável: o atraso da transição cresce com o peso (−2.0 → +250M) até um ponto em que o PPO nunca acha que vale a pena atravessar (−4.0). Mesma família de fenômeno do `is_alive`/`fall_penalty`: penalidade terminal forte não ensina a "não colidir andando" — ensina a **não andar**. Predição pros sweeps de `fall_penalty` e `head_contact_penalty`: mesmo padrão de atraso monotônico, com o `fall_8p0` como candidato a travar de vez.
+
 ### fall\_penalty
 **Registro** (_go2\_env\_cfg.py:385_):
 
