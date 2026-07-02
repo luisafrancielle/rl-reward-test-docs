@@ -133,7 +133,7 @@ env_kwargs:
 
 ## Recompensa avaliada
 
-Nesta rodada, o sweep foi feito apenas em `track_lin_vel_xy_exp`. O objetivo é entender como o peso dessa recompensa muda a marcha do **teacher** e o quanto o **student** consegue preservar esse comportamento.
+Nesta rodada, o sweep foi feito apenas em `track_lin_vel_xy_exp`. O objetivo é entender como o peso dessa recompensa muda a caminhada do **teacher** e o quanto o **student** consegue preservar esse comportamento.
 
 **Registro**:
 
@@ -251,7 +251,21 @@ onde:
 | `sweep_ts_tracklin_3p0.yml` | `3.0` | anda, parecido ao baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/t44xqn2s?nw=nwuserluisafrancielle) |
 | `sweep_ts_tracklin_5p0.yml` | `5.0` | anda, mais saltitante / mais esquisito | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/oianwp30?nw=nwuserluisafrancielle) |
 
-**Conclusão — `track_lin_vel_xy_exp`:** 
+<div class="image-pair">
+  <div class="image-panel">
+    <p><strong>Métricas 1</strong></p>
+    <img src="{{ '/images/ts_tracklin1.png' | relative_url }}" alt="Métricas Teacher-Student para track_lin_vel_xy_exp">
+  </div>
+  <div class="image-panel">
+    <p><strong>Métricas 2</strong></p>
+    <img src="{{ '/images/ts_tracklin2.png' | relative_url }}" alt="Métricas Teacher-Student para track_lin_vel_xy_exp">
+  </div>
+</div>
+
+**Conclusão — `track_lin_vel_xy_exp`:** valores muito baixos (`0.5`, `1.0`) simplesmente não
+dão o incentivo certeiro de andar — o robô congela ou cai. Valores altos demais (`5.0`) fazem
+alcançar a velocidade valer muito mais que respeitar o restante das recompensas, então ele anda
+saltitando e de forma esquisita. A faixa boa fica em torno do baseline (`1.5`–`3.0`). 
 
 ## Sweep `track_ang_vel_z_exp`
 
@@ -363,17 +377,26 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_trackang_0p25.yml` | `0.25` | não anda — cai de lado | |
-| `sweep_ts_trackang_1p0.yml` | `1.0` | | |
-| `sweep_ts_trackang_1p5.yml` | `1.5` | não anda — trava no chão — | |
-| `sweep_ts_trackang_3p0.yml` | `3.0` | não anda - trava no chão, uma pata da frente levantada | |
+| `sweep_ts_trackang_0p25.yml` | `0.25` | não anda — cai de lado | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/4eo8ltbv) |
+| `sweep_ts_trackang_1p0.yml` | `1.0` | anda — parecido ao baseline | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/kxqtmb44) |
+| `sweep_ts_trackang_1p5.yml` | `1.5` | não anda — trava no chão — | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/u7t83y01) |
+| `sweep_ts_trackang_3p0.yml` | `3.0` | não anda - trava no chão, uma pata da frente levantada | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/mvfry0nw) |
 
-**Conclusão — `track_ang_vel_z_exp`:** muito mais sensível que o `track_lin` — qualquer
-desvio do baseline (`0.75`) já quebra a caminhada. Abaixo (`0.25`) o
-controle de yaw fica fraco e o robô cai de lado. Acima
-(`1.5`, `3.0`) premia fortemente o
-"yaw zero" e é melhor ficando imóvel (parado = giro nulo = recompensa maior),
-então o robô trava no chão. Só o baseline `0.75` anda. O `track_ang` tem uma janela estreita em torno do baseline.
+<div class="image-pair">
+  <div class="image-panel">
+    <p><strong>Métricas 1</strong></p>
+    <img src="{{ '/images/ts-trackang1.png' | relative_url }}" alt="Métricas Teacher-Student para track_ang_vel_z_exp">
+  </div>
+  <div class="image-panel">
+    <p><strong>Métricas 2</strong></p>
+    <img src="{{ '/images/ts-trackang2.png' | relative_url }}" alt="Métricas Teacher-Student para track_ang_vel_z_exp">
+  </div>
+</div>
+
+**Conclusão — `track_ang_vel_z_exp`:** bem sensível — só anda pertinho do baseline (`0.75`–`1.0`).
+Valores baixos (`0.25`) não seguram o giro e o robô cai de lado. Valores altos (`1.5`, `3.0`) —
+como o comando de giro é zero — recompensam tanto o "não girar" que ficar parado vira a melhor
+opção, então o robô trava no chão.
 
 ## Sweep `feet_air_time`
 
@@ -451,8 +474,19 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_feetair_0p5.yml` | `0.5` | | |
-| `sweep_ts_feetair_2p0.yml` | `2.0` | | |
+| `sweep_ts_feetair_0p5.yml` | `0.5` | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/f4xpcsmy) |
+| `sweep_ts_feetair_2p0.yml` | `2.0` | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/fs1u7ln8) |
+
+<div class="image-pair">
+  <div class="image-panel">
+    <p><strong>Métricas 1</strong></p>
+    <img src="{{ '/images/ts_feetair1.png' | relative_url }}" alt="Métricas Teacher-Student para feet_air_time">
+  </div>
+  <div class="image-panel">
+    <p><strong>Métricas 2</strong></p>
+    <img src="{{ '/images/ts_feetair2.png' | relative_url }}" alt="Métricas Teacher-Student para feet_air_time">
+  </div>
+</div>
 
 ## Sweep `flat_orientation_l2`
 
@@ -561,19 +595,26 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_flatorient_0p25.yml` | `-0.25` | não anda — cai de lado e trava no chão | |
-| `sweep_ts_flatorient_1p0.yml` | `-1.0` | não anda — trava no chão (uma pata levantada) | |
-| `sweep_ts_flatorient_3p0.yml` | `-3.0` | | |
-| `sweep_ts_flatorient_5p0.yml` | `-5.0` | não anda — trava prostrado, 4 patas no chão | |
+| `sweep_ts_flatorient_0p25.yml` | `-0.25` | não anda — cai de lado e trava no chão | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/96du1xr4) |
+| `sweep_ts_flatorient_1p0.yml` | `-1.0` | não anda — trava no chão (uma pata levantada) | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/njznz6wq) |
+| `sweep_ts_flatorient_3p0.yml` | `-3.0` | não anda — dá uma passada e cai para frente | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/d7hij4xo) |
+| `sweep_ts_flatorient_5p0.yml` | `-5.0` | não anda — trava prostrado, 4 patas no chão | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/ybd5g3ea) |
 
-**Conclusão — `flat_orientation_l2`:** igual ao `track_ang`, tem **janela estreita** em torno
-do baseline (`-2.0`): tanto **mais fraco** (`-0.25`, `-1.0`) quanto **mais forte** (`-5.0`)
-quebram a marcha. Fraco demais → sem controle de postura, o robô **cai de lado e trava**;
-forte demais → punir *qualquer* inclinação faz o melhor ser **deitar plano no chão** (corpo
-nivelado = penalidade mínima), então ele **trava prostrado** com as 4 patas no chão. Só o
-`-2.0` equilibra. É outro exemplo de recompensa **sensível** no TS (contraste com o
-`track_lin`, de faixa ampla). Falta testar `-3.0` p/ mapear a borda entre `-2.0` (anda) e
-`-5.0` (prostra).
+<div class="image-pair">
+  <div class="image-panel">
+    <p><strong>Métricas 1</strong></p>
+    <img src="{{ '/images/ts_flatorient.png' | relative_url }}" alt="Métricas Teacher-Student para flat_orientation_l2">
+  </div>
+  <div class="image-panel">
+    <p><strong>Métricas 2</strong></p>
+    <img src="{{ '/images/ts_flatorient2.png' | relative_url }}" alt="Métricas Teacher-Student para flat_orientation_l2">
+  </div>
+</div>
+
+**Conclusão — `flat_orientation_l2`:** o mais sensível de todos — praticamente só o baseline
+(`-2.0`) anda. Valores fracos não seguram a postura e o robô cai de lado / trava. Valores fortes
+punem tanto qualquer inclinação que a melhor saída vira deitar plano no chão, então ele trava
+prostrado. Até o `-3.0`, coladinho no baseline, já cai.
 
 ## Sweep `is_alive`
 
@@ -639,13 +680,23 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_isalive_0p25.yml` | `0.25` | anda — patas mais soltas, cada uma difere da outra | |
-| `sweep_ts_isalive_0p5.yml` | `0.5` | anda — galopa em sincronia | |
+| `sweep_ts_isalive_0p25.yml` | `0.25` | anda — patas mais soltas, cada uma difere da outra | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/n8bfv4ne) |
+| `sweep_ts_isalive_0p5.yml` | `0.5` | anda — galopa em sincronia | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/aj119ght) |
 
-**Conclusão — `is_alive`:** ao contrário do `track_ang`, não quebra a caminhada nesta faixa —
-o robô continua andando nos dois valores. O efeito é na coordenação da passada: em `0.25`
-as patas ficam mais soltas e assimétricas (cada uma difere da outra); em `0.5` o "galope" fica
-sincronizado. 
+<div class="image-pair">
+  <div class="image-panel">
+    <p><strong>Métricas 1</strong></p>
+    <img src="{{ '/images/ts_isalive.png' | relative_url }}" alt="Métricas Teacher-Student para is_alive">
+  </div>
+  <div class="image-panel">
+    <p><strong>Métricas 2</strong></p>
+    <img src="{{ '/images/ts_isalive1.png' | relative_url }}" alt="Métricas Teacher-Student para is_alive">
+  </div>
+</div>
+
+**Conclusão — `is_alive`:** esse não quebra a caminhada — o robô anda nos dois valores. Ele só
+muda a coordenação das patas: em `0.25` as patas ficam mais soltas, cada uma fazendo uma coisa;
+em `0.5` o galope fica mais sincronizado. No TS ele nem é necessário (o baseline é `0`).
 
 ## Sweep `action_rate_l2`
 
@@ -717,7 +768,7 @@ onde:
   </div>
 </div>
 
-### `action_rate_l2 = -0.05`
+### `action_rate_l2 = -0.005`
 
 <div class="video-pair">
   <div class="video-panel">
@@ -738,15 +789,24 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_actionrate_0p015.yml` | `-0.015` | | |
-| `sweep_ts_actionrate_0p02.yml` | `-0.02` | não anda — dá um passo e cai para frente | |
-| `sweep_ts_actionrate_0p05.yml` | `-0.05` | não anda — dá um passo e cai para frente (igual) | |
+| `sweep_ts_actionrate_0p005.yml` | `-0.005` | não anda — dá um passo e cai para frente | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/fto6iqdu) |
+| `sweep_ts_actionrate_0p015.yml` | `-0.015` | anda — meio tortinho | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/st0gvvbh) |
+| `sweep_ts_actionrate_0p02.yml` | `-0.02` | não anda — dá um passo e cai para frente | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/r97d9ojq) |
 
-**Conclusão — `action_rate_l2`:** o baseline (`-0.01`) anda; subir a penalidade já em `-0.02`
-quebra a marcha — o robô **dá um passo e cai para frente** (e `-0.05` é igual). Faz sentido:
-punir demais a *mudança* de ação deixa a política **lenta/travada**, incapaz das correções
-rápidas que a passada exige, então ela dá um passo e não se recupera. Como `-0.02` já falha
-(logo acima do baseline), a **borda superior é apertada**.
+<div class="image-pair">
+  <div class="image-panel">
+    <p><strong>Métricas 1</strong></p>
+    <img src="{{ '/images/ts_actionrate1.png' | relative_url }}" alt="Métricas Teacher-Student para action_rate_l2">
+  </div>
+  <div class="image-panel">
+    <p><strong>Métricas 2</strong></p>
+    <img src="{{ '/images/ts_actionrate2.png' | relative_url }}" alt="Métricas Teacher-Student para action_rate_l2">
+  </div>
+</div>
+
+**Conclusão — `action_rate_l2`:** valores altos demais (a partir de `-0.02`) travam a política —
+ela não muda a ação rápido o bastante pra corrigir o passo, então o robô dá um passo e cai. Em
+`-0.015` ainda anda, mas já meio torto. (O lado fraco, `-0.005`, ainda falta confirmar.)
 
 ## Sweep `dof_torques_l2`
 
@@ -836,16 +896,25 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_torques_1em4.yml` | `-0.0001` | não anda — passadas muito largas e cai | |
-| `sweep_ts_torques_3em4.yml` | `-0.0003` | | |
-| `sweep_ts_torques_4em4.yml` | `-0.0004` | não anda — trava no chão | |
+| `sweep_ts_torques_1em4.yml` | `-0.0001` | não anda — passadas muito largas e cai | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/feqqjsxo) |
+| `sweep_ts_torques_3em4.yml` | `-0.0003` | anda — bem abaixado e sincronizado, mas passos bem travados | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/gfp9frqz) |
+| `sweep_ts_torques_4em4.yml` | `-0.0004` | não anda — trava no chão | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/5zfu0ohr) |
 
-**Conclusão — `dof_torques_l2`:** mais um termo de **janela estreita** em torno do baseline
-(`-0.0002`), como o `track_ang` e o `flat_orientation`. Fraco demais (`-0.0001`) → o torque
-fica "barato", o robô dá **passadas muito largas** e agressivas e **cai**; forte demais
-(`-0.0004`) → economizar torque vira prioridade, ele quase não se move e **trava no chão**.
-Só o `-0.0002` equilibra. Falta testar `-0.0003` p/ mapear a borda entre `-0.0002` (anda) e
-`-0.0004` (trava).
+<div class="image-pair">
+  <div class="image-panel">
+    <p><strong>Métricas 1</strong></p>
+    <img src="{{ '/images/ts_torques1.png' | relative_url }}" alt="Métricas Teacher-Student para dof_torques_l2">
+  </div>
+  <div class="image-panel">
+    <p><strong>Métricas 2</strong></p>
+    <img src="{{ '/images/ts_torques2.png' | relative_url }}" alt="Métricas Teacher-Student para dof_torques_l2">
+  </div>
+</div>
+
+**Conclusão — `dof_torques_l2`:** valores fracos (`-0.0001`) deixam o torque "barato", o robô dá
+passadas largas e agressivas e cai. Valores fortes (`-0.0004`) fazem economizar torque virar
+prioridade e ele trava no chão. No meio (`-0.0003`) ainda anda, mas bem abaixado e travado.
+Janela estreita em torno do baseline.
 
 ## Sweep `fall_penalty`
 
@@ -955,19 +1024,26 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_fall_0p0.yml` | `0.0` | anda (sem punição de queda) | |
-| `sweep_ts_fall_1p5.yml` | `-1.5` | | |
-| `sweep_ts_fall_2p0.yml` | `-2.0` | não anda — cruza as patas e cai | |
-| `sweep_ts_fall_4p0.yml` | `-4.0` | não anda — cai para frente | |
+| `sweep_ts_fall_0p0.yml` | `0.0` | anda (sem punição de queda) | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/x0epq9cd) |
+| `sweep_ts_fall_1p5.yml` | `-1.5` | não anda — cai de lado | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/60584cmw) |
+| `sweep_ts_fall_2p0.yml` | `-2.0` | não anda — cruza as patas e cai | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/5hln77vu) |
+| `sweep_ts_fall_4p0.yml` | `-4.0` | não anda — cai para frente | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/tzl2tch9) |
 
-**Conclusão — `fall_penalty`:** sensibilidade **de um lado só** — o robô anda tanto em `0.0`
-(sem punição!) quanto no baseline `-1.0`; só quebra quando a penalidade fica **forte**
-(`-2.0`: cruza as patas e cai; `-4.0`: cai para frente). Mecanismo provável: um custo terminal
-grande cria uma **descontinuidade forte no valor** no instante da queda, o que desestabiliza a
-estimativa de vantagem perto da "borda de cair" e leva a marchas estranhas. Detalhe importante:
-o TS anda **até com `fall_penalty = 0`** — não precisa da punição de queda pra aprender a andar
-(paralelo com o `is_alive`, que também não é necessário no TS). A borda fica entre `-1.0` (anda)
-e `-2.0` (quebra).
+<div class="image-pair">
+  <div class="image-panel">
+    <p><strong>Métricas 1</strong></p>
+    <img src="{{ '/images/ts_fall1.png' | relative_url }}" alt="Métricas Teacher-Student para fall_penalty">
+  </div>
+  <div class="image-panel">
+    <p><strong>Métricas 2</strong></p>
+    <img src="{{ '/images/ts_fall2.png' | relative_url }}" alt="Métricas Teacher-Student para fall_penalty">
+  </div>
+</div>
+
+**Conclusão — `fall_penalty`:** nem precisa desse termo pra andar — o robô anda até com ele em
+`0`. Valores fortes (`-1.5`, `-2.0`, `-4.0`) atrapalham: o custo enorme de cair bagunça o
+aprendizado e o robô acaba caindo do mesmo jeito, de formas estranhas (cruzando as patas,
+tombando pra frente).
 
 ## Sweep `feet_slide`
 
@@ -995,15 +1071,14 @@ desencorajar arrasto lateral dos pés.
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
-| `sweep_ts_feetslide_0p25.yml` | `-0.25` | | |
+| `sweep_ts_feetslide_0p25.yml` | `-0.25` | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/TS/runs/ogxblqhd) |
 
 ## Interpretação geral
 
-Rodando cada recompensa isolada (OFAT) em torno do baseline, surgiu um padrão claro: as
-recompensas têm **sensibilidades bem diferentes**, e o **jeito como o robô falha** (a
-"assinatura das patas") diz *por que* cada uma quebra.
+Rodando cada recompensa isolada em torno do baseline, surgiu um padrão: as
+recompensas têm sensibilidades bem diferentes, e o jeito como o robô falha diz por que cada uma quebra.
 
-### Assinaturas de falha (o que as patas fazem)
+### O que as patas fazem
 
 | recompensa | falha | assinatura das patas |
 | --- | --- | --- |
@@ -1011,36 +1086,31 @@ recompensas têm **sensibilidades bem diferentes**, e o **jeito como o robô fal
 | `flat_orientation` -5.0 | prostra | 4 patas no chão, corpo plano |
 | `dof_torques` -0.0001 | cai | passadas largas / agressivas |
 | `dof_torques` -0.0004 | trava | quase não move |
-| `fall_penalty` -2.0 | cai | **cruza as patas** |
+| `fall_penalty` -2.0 | cai | cruza as patas |
 | `fall_penalty` -4.0 | cai | tomba pra frente |
 | `is_alive` 0.5 | anda | galope sincronizado |
 | `is_alive` 0.25 | anda | patas soltas, assimétricas |
 
-Padrão: penalidade **forte demais** → o robô **congela / prostra** (minimiza o termo ficando
-parado); incentivo **fraco demais** → **movimento sem controle** (passada larga, cruza patas, cai).
+Padrão: penalidade forte demais → o robô congela / prostra (minimiza o termo ficando
+parado); incentivo fraco demais → movimento sem controle (passada larga, cruza patas, cai).
 
 ### Classes de sensibilidade
 
 | recompensa | tipo | faixa que anda | observação |
 | --- | --- | --- | --- |
 | `track_lin` | tarefa (+) | ampla (~1.0–3.0) | quebra só nos extremos (0.5 congela, 5.0 saltita) |
-| `track_ang` | tarefa (+) | estreita (~0.75) | qualquer lado quebra |
-| `flat_orientation` | regularização (−) | estreita (~-2.0) | qualquer lado quebra |
-| `dof_torques` | regularização (−) | estreita (~-0.0002) | qualquer lado quebra |
-| `action_rate` | regularização (−) | borda superior apertada | -0.02 já cai |
+| `track_ang` | tarefa (+) | estreita (~0.75–1.0) | 0.25 cai de lado; ≥1.5 trava |
+| `flat_orientation` | regularização (−) | ultra-estreita (só -2.0) | até -3.0 já cai; -5.0 prostra |
+| `dof_torques` | regularização (−) | estreita (~-0.0002) | -0.0003 degrada; -0.0004 trava |
+| `action_rate` | regularização (−) | ~-0.01 a -0.015 | -0.015 anda torto; -0.02 cai |
 | `is_alive` | sobrevivência (+) | não quebra (0–0.5) | só muda a coordenação |
-| `fall_penalty` | sobrevivência (−) | tolera fraco/0, quebra forte | -2.0 cruza as patas |
+| `fall_penalty` | sobrevivência (−) | tolera fraco/0, quebra forte | -1.5 cai de lado; -2.0 cruza patas |
 
 ### O que isso sugere
 
-- As **penalidades de regularização** (torque, orientação, yaw) são as **mais sensíveis** no
-  TS — janelas estreitas. Provável causa: o **domain randomization** obriga o robô a operar
+- As penalidades de regularização (torque, orientação, yaw) são as mais sensíveis no
+  TS — janelas estreitas. Provável causa: o domain randomization obriga o robô a operar
   numa faixa dinâmica larga (fricção 0.05–4.0, massas variadas); penalidade forte demais nessa
-  condição empurra pro "trava/prostra", e fraca demais deixa o movimento descontrolado.
-- As recompensas de **sobrevivência** (`is_alive`, `fall_penalty`) são **dispensáveis** no TS —
-  ele anda com elas em `0`. Difere da **base**, onde o `is_alive` era importante. Hipótese: o
-  teacher tem o **latente privilegiado** (a física real), então aprende a andar sem essas muletas.
-- O `track_lin` (a recompensa da tarefa em si) é o mais **robusto** — faz sentido, é o objetivo.
-
-Ou seja: os mesmos pesos da base não transferem porque o **problema é outro** (DR + latente +
-otimizador), e cada termo reage diferente a essa mudança.
+  condição empurra pro trava/prostra, e fraca demais deixa o movimento descontrolado.
+- As recompensas de sobrevivência (`is_alive`, `fall_penalty`) são dispensáveis no TS —
+  ele anda com elas em `0`. 
