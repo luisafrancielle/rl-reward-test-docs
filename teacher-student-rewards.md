@@ -463,6 +463,25 @@ onde:
 * vale `0` com o tronco perfeitamente nivelado e cresce com a inclinação;
 * peso **negativo** (penalidade): forte demais → robô prioriza ficar plano e pode **sentar/congelar**.
 
+### `flat_orientation_l2 = -0.25`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-flatorient_0p25.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-flatorient_0p25.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
 ### `flat_orientation_l2 = -1.0`
 
 <div class="video-pair">
@@ -503,6 +522,7 @@ onde:
 
 | config | valor | comportamento | métricas |
 | --- | --- | --- | --- |
+| `sweep_ts_flatorient_0p25.yml` | `-0.25` | | |
 | `sweep_ts_flatorient_1p0.yml` | `-1.0` | | |
 | `sweep_ts_flatorient_5p0.yml` | `-5.0` | | |
 
@@ -578,5 +598,169 @@ onde:
 o robô continua andando nos dois valores. O efeito é na coordenação da passada: em `0.25`
 as patas ficam mais soltas e assimétricas (cada uma difere da outra); em `0.5` o "galope" fica
 sincronizado. 
+
+## Sweep `action_rate_l2`
+
+Penaliza mudanças bruscas entre ações consecutivas. O peso é negativo: quanto maior a
+magnitude, mais a política é pressionada a suavizar os comandos.
+
+### `action_rate_l2 = -0.02`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-actionrate_0p002.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-actionrate_0p002.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `action_rate_l2 = -0.05`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-actionrate_0p05.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-actionrate_0p05.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | comportamento | métricas |
+| --- | --- | --- | --- |
+| `sweep_ts_actionrate_0p02.yml` | `-0.02` | | |
+| `sweep_ts_actionrate_0p05.yml` | `-0.05` | | |
+
+## Sweep `dof_torques_l2`
+
+Penaliza esforço de torque nas juntas. O peso é negativo: aumentar a magnitude tende a
+favorecer movimentos mais econômicos, mas pode tirar força da locomoção.
+
+### `dof_torques_l2 = -0.0001`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-260014080-teacher-torques_1em4.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-torques_1em4.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `dof_torques_l2 = -0.0004`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-torques_4em4.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-torques_4em4.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | comportamento | métricas |
+| --- | --- | --- | --- |
+| `sweep_ts_torques_1em4.yml` | `-0.0001` | | |
+| `sweep_ts_torques_4em4.yml` | `-0.0004` | | |
+
+## Sweep `fall_penalty`
+
+Penaliza episódios que terminam em queda/reset. Peso mais negativo aumenta o custo de cair;
+com peso zero, a queda deixa de ser punida diretamente por esse termo.
+
+### `fall_penalty = 0.0`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-fall_0p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-fall_0p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `fall_penalty = -2.0`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-teacher-fall_2p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-299925504-student-fall_2p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+### `fall_penalty = -4.0`
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>Teacher</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-teacher-fall_4p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>Student</strong></p>
+
+    <video controls preload="metadata">
+      <source src="{{ '/videos/policy-step-280068096-student-fall_4p0.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+| config | valor | comportamento | métricas |
+| --- | --- | --- | --- |
+| `sweep_ts_fall_0p0.yml` | `0.0` | | |
+| `sweep_ts_fall_2p0.yml` | `-2.0` | | |
+| `sweep_ts_fall_4p0.yml` | `-4.0` | | |
 
 ## Interpretação geral
