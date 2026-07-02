@@ -342,6 +342,13 @@ A ideia: numa caminhada boa, o tronco deve ficar numa altura **estável**, sem *
   </div>
 </div>
 
+| config | valor | razão vs baseline (-2.0) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_linvelz_0p5.yml` | -0.5 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/8t87nzu9?nw=nwuserimdudak) |
+| `sweep_linvelz_1p0.yml` | -1.0 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/yl791myf?nw=nwuserimdudak) |
+| `sweep_linvelz_3p0.yml` | -3.0 | ×1.5 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/907uhqs5?nw=nwuserimdudak) |
+| `sweep_linvelz_5p0.yml` | -5.0 | ×2.5 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/1qy8uvjm?nw=nwuserimdudak) |
+
 ### ang\_vel\_xy\_l2
 **Registro** (_go2\_env\_cfg.py:350_):
 
@@ -362,6 +369,13 @@ onde:
 *   peso **−0.05** (negativo → penalidade)
 
 Kernel **L2** (sem `exp`): pune o tronco **balançar/tombar** — cabecear pra frente/trás e rolar de lado. Cresce com o quadrado da velocidade angular, então oscilação pequena custa pouco e tombo brusco custa muito. Não pune o giro de **yaw** (eixo z) — esse é tarefa do `track_ang_vel_z_exp`.
+
+| config | valor | razão vs baseline (-0.05) | comportamento | métricas |
+| ---| ---| ---| ---| --- |
+| `sweep_angvelxy_0p01.yml` | -0.01 | ÷5 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/1jpose7l?nw=nwuserimdudak) |
+| `sweep_angvelxy_0p025.yml` | -0.025 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0jeih3hj?nw=nwuserimdudak) |
+| `sweep_angvelxy_0p1.yml` | -0.1 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/zmt35egs?nw=nwuserimdudak) |
+| `sweep_angvelxy_0p2.yml` | -0.2 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/ucv9ql2c?nw=nwuserimdudak) |
 
 ### dof\_torques\_l2
 **Registro** (_go2\_env\_cfg.py:351_):
@@ -413,10 +427,10 @@ Pune o **esforço** das juntas (soma dos torques ao quadrado). Incentiva movimen
 
 | config | valor | razão vs baseline (-0.0002) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_doftorq_5e5.yml` | -5e-5 | ÷4 | | [wandb]() |
-| `sweep_doftorq_1e4.yml` | -1e-4 | ÷2 | | [wandb]() |
-| `sweep_doftorq_4e4.yml` | -4e-4 | ×2 | | [wandb]() |
-| `sweep_doftorq_8e4.yml` | -8e-4 | ×4 | | [wandb]() |
+| `sweep_doftorq_5e5.yml` | -5e-5 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0q4tw2q7?nw=nwuserimdudak) |
+| `sweep_doftorq_1e4.yml` | -1e-4 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/7g0axmhg?nw=nwuserimdudak) |
+| `sweep_doftorq_4e4.yml` | -4e-4 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/66zhilrw?nw=nwuserimdudak) |
+| `sweep_doftorq_8e4.yml` | -8e-4 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/ull21yky?nw=nwuserimdudak) |
 
 ### dof\_acc\_l2
 **Registro** (_go2\_env\_cfg.py:352_):
@@ -468,10 +482,10 @@ Pune **mudanças bruscas** de velocidade articular → é o alvo direto do **tre
 
 | config | valor | razão vs baseline (-2.5e-7) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_dofacc_6p25e8.yml` | -6.25e-8 | ÷4 | | [wandb]() |
-| `sweep_dofacc_1p25e7.yml` | -1.25e-7 | ÷2 | | [wandb]() |
-| `sweep_dofacc_5e7.yml` | -5e-7 | ×2 | | [wandb]() |
-| `sweep_dofacc_1e6.yml` | -1e-6 | ×4 | | [wandb]() |
+| `sweep_dofacc_6p25e8.yml` | -6.25e-8 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/wiils4h3?nw=nwuserimdudak) |
+| `sweep_dofacc_1p25e7.yml` | -1.25e-7 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/p568f34x?nw=nwuserimdudak) |
+| `sweep_dofacc_5e7.yml` | -5e-7 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/2d6ydb94?nw=nwuserimdudak) |
+| `sweep_dofacc_1e6.yml` | -1e-6 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/qnfz9is9?nw=nwuserimdudak) |
 
 ### action\_rate\_l2
 **Registro** (_go2\_env\_cfg.py:353_):
@@ -523,10 +537,10 @@ Suaviza a **saída da política** (não a física direta): pune comandos que pul
 
 | config | valor | razão vs baseline (-0.01) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_actrate_0p0025.yml` | -0.0025 | ÷4 | | [wandb]() |
-| `sweep_actrate_0p005.yml` | -0.005 | ÷2 | | [wandb]() |
-| `sweep_actrate_0p02.yml` | -0.02 | ×2 | | [wandb]() |
-| `sweep_actrate_0p04.yml` | -0.04 | ×4 | | [wandb]() |
+| `sweep_actrate_0p0025.yml` | -0.0025 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/yt11nlfl?nw=nwuserimdudak) |
+| `sweep_actrate_0p005.yml` | -0.005 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/n1bk0omw?nw=nwuserimdudak) |
+| `sweep_actrate_0p02.yml` | -0.02 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/tr8adna6?nw=nwuserimdudak) |
+| `sweep_actrate_0p04.yml` | -0.04 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/5w0yk4nn?nw=nwuserimdudak) |
 
 ### feet\_air\_time
 **Registro** (_go2\_env\_cfg.py:354_):
@@ -592,10 +606,10 @@ Incentiva **passadas marcadas** (pé fica mais de 0.5 s no ar) em vez de arrasta
 
 | config | valor | razão vs baseline (0.5) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_feetair_0p125.yml` | 0.125 | ÷4 | | [wandb]() |
-| `sweep_feetair_0p25.yml` | 0.25 | ÷2 | | [wandb]() |
-| `sweep_feetair_1p0.yml` | 1.0 | ×2 | | [wandb]() |
-| `sweep_feetair_2p0.yml` | 2.0 | ×4 | | [wandb]() |
+| `sweep_feetair_0p125.yml` | 0.125 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/jo11p7vd?nw=nwuserimdudak) |
+| `sweep_feetair_0p25.yml` | 0.25 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/wafhr0lg?nw=nwuserimdudak) |
+| `sweep_feetair_1p0.yml` | 1.0 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/heckj11n?nw=nwuserimdudak) |
+| `sweep_feetair_2p0.yml` | 2.0 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/1u2kxyeg?nw=nwuserimdudak) |
 
 ### feet\_slide
 **Registro** (_go2\_env\_cfg.py:401_):
@@ -656,10 +670,10 @@ Pune o pé **escorregar enquanto apoia** — é o fix estrutural do arrasto: tor
 
 | config | valor | razão vs baseline (-0.25) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_feetslide_0p0625.yml` | -0.0625 | ÷4 | | [wandb]() |
-| `sweep_feetslide_0p125.yml` | -0.125 | ÷2 | | [wandb]() |
-| `sweep_feetslide_0p5.yml` | -0.5 | ×2 | | [wandb]() |
-| `sweep_feetslide_1p0.yml` | -1.0 | ×4 | | [wandb]() |
+| `sweep_feetslide_0p0625.yml` | -0.0625 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/lc7a9k6r?nw=nwuserimdudak) |
+| `sweep_feetslide_0p125.yml` | -0.125 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/11kj5ukx?nw=nwuserimdudak) |
+| `sweep_feetslide_0p5.yml` | -0.5 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/9n45aryw?nw=nwuserimdudak) |
+| `sweep_feetslide_1p0.yml` | -1.0 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/21rmvdm5?nw=nwuserimdudak) |
 
 ### undesired\_contacts
 **Registro** (_go2\_env\_cfg.py:372_):
@@ -721,10 +735,10 @@ Pune contato em partes que **não deveriam** tocar o chão (ex.: coxas). Força 
 
 | config | valor | razão vs baseline (-0.2) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_undesired_0p05.yml` | -0.05 | ÷4 | | [wandb]() |
-| `sweep_undesired_0p1.yml` | -0.1 | ÷2 | | [wandb]() |
-| `sweep_undesired_0p4.yml` | -0.4 | ×2 | | [wandb]() |
-| `sweep_undesired_0p8.yml` | -0.8 | ×4 | | [wandb]() |
+| `sweep_undesired_0p05.yml` | -0.05 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/839rkvcp?nw=nwuserimdudak) |
+| `sweep_undesired_0p1.yml` | -0.1 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/bkz21lyx?nw=nwuserimdudak) |
+| `sweep_undesired_0p4.yml` | -0.4 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/x28i3r91?nw=nwuserimdudak) |
+| `sweep_undesired_0p8.yml` | -0.8 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/swzadjz4?nw=nwuserimdudak) |
 
 ### illegal\_contact\_penalty
 **Registro** (_go2\_env\_cfg.py:380_):
@@ -853,10 +867,10 @@ Define o quanto **cair** custa. Alto demais → cauteloso demais, trava num óti
 
 | config | valor | razão vs baseline (-2.0) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_fall_0p5.yml` | -0.5 | ÷4 | | [wandb]() |
-| `sweep_fall_1p0.yml` | -1.0 | ÷2 | | [wandb]() |
-| `sweep_fall_4p0.yml` | -4.0 | ×2 | | [wandb]() |
-| `sweep_fall_8p0.yml` | -8.0 | ×4 | | [wandb]() |
+| `sweep_fall_0p5.yml` | -0.5 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/tk5p4bcm?nw=nwuserimdudak) |
+| `sweep_fall_1p0.yml` | -1.0 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/0vewnk19?nw=nwuserimdudak) |
+| `sweep_fall_4p0.yml` | -4.0 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/mxkhpb3r?nw=nwuserimdudak) |
+| `sweep_fall_8p0.yml` | -8.0 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/njs9obfl?nw=nwuserimdudak) |
 
 ### head\_contact\_penalty
 **Registro** (_go2\_env\_cfg.py:390_):
@@ -914,10 +928,24 @@ Protege contra **mergulhar a frente do corpo** (cabeçada/tombo pra frente). Alt
 
 | config | valor | razão vs baseline (-1.0) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_head_0p25.yml` | -0.25 | ÷4 | | [wandb]() |
-| `sweep_head_0p5.yml` | -0.5 | ÷2 | | [wandb]() |
-| `sweep_head_2p0.yml` | -2.0 | ×2 | | [wandb]() |
-| `sweep_head_4p0.yml` | -4.0 | ×4 | | [wandb]() |
+| `sweep_head_0p25.yml` | -0.25 | ÷4 | anda — transição **mais cedo** que o baseline (~500M) | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/hvxx3cj0?nw=nwuserimdudak) |
+| `sweep_head_0p5.yml` | -0.5 | ÷2 | anda — transição tardia (~650–700M) | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/nv4837kd?nw=nwuserimdudak) |
+| `sweep_head_2p0.yml` | -2.0 | ×2 | anda — transição ~600–650M | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/l280ix3h?nw=nwuserimdudak) |
+| `sweep_head_4p0.yml` | -4.0 | ×4 | **não anda** — colapsa na transição e converge pra **mergulho de cabeça** | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/t2r06ov5?nw=nwuserimdudak) |
+
+![Gráfico head_contact_penalty](images/head_contact_penalty.png)
+
+**Resultados do sweep — o paradoxo do mergulho:**
+
+*   **Ordem das transições** (track_lin saturando em ~1.25): `-0.25` transiciona **antes do baseline** (~500M) — abaratar a cabeçada barateia a fase desajeitada, coerente com a "barreira de energia" do `illegal_contact_penalty`. Baseline ~550–600M; `-2.0` e `-0.5` entre 600–700M (a inversão entre eles é ruído entre runs — mesmo seed, GPU não-determinística); `-4.0` **nunca**.
+*   **O `-4.0` não congela: colapsa.** Até ~550M ele seguia o pelotão (track_lin ~0.5). Em ~550–600M, colapso violento com assinatura de **mergulho de cabeça** em todos os termos: `head_contact_penalty`/step despenca pra −4 (cabeçada em praticamente todo episódio), `is_alive`/step cai de 0.4998 pra ~0.46 (episódios curtíssimos), `lin_vel_z_l2` espeta −0.85 (velocidade vertical = queda), `ang_vel_xy_l2` −0.8 (rotação de pitch = cabecear pra frente), reward total acumulado crava em −1000. Depois de ~650M "estabiliza" num **atrator degenerado**: lança o corpo pra frente e enfia a cabeça no chão; o track_lin rasteja de 0.25 até ~0.55 em 1B mas nunca vira caminhada.
+*   **Por que o maior castigo de cabeçada produz o robô que mais cabeceia?** Dois mecanismos:
+    1.  **A penalidade terminal é um evento único e barata no retorno real**: `−4 × dt = −0.08` de reward real — equivale a ~4 steps de reward bom. Já o *valor futuro* dos estados de transição desaba justamente por causa das cabeçadas ocasionais ×(−4). Quando o valor esperado de continuar fica pequeno, **morrer custa −0.08 e zera o futuro ruim** — mergulhar vira racional. E quanto maior a penalidade, mais estados caem abaixo desse limiar → armadilha auto-reforçada.
+    2.  **Instabilidade de otimização**: cada evento −4 gera advantage gigante → updates agressivos bem na fase mais frágil do aprendizado → a política despenca no atrator do mergulho, de onde toda tentativa exploratória de avançar reencontra o evento −4.
+*   **Contraste com o `illegal_4p0`** (mesmo ×4, modo de falha diferente): o contato ilegal da **base** dispara cedo e o tempo todo na fase desajeitada → o gradiente ensina "não tente" **antes** do robô se comprometer → **congela parado**. A cabeçada só dispara **durante** a tentativa de andar rápido (pitch pra frente) → a penalidade **embosca** a política no meio da transição → **colapsa mergulhando**. O *quando* o evento penalizado aparece no aprendizado define o modo de falha.
+*   **Cuidado com métricas per-step em episódios curtos**: o `-4.0` termina com o **melhor** `track_ang_vel_z`/step (~0.72) e o **menor** gasto de torque — não porque é bom, mas porque a média per-step de episódios de segundos é dominada pela fase inicial parada. Métrica per-step engana quando o episódio encurta.
+
+**Conclusão — `head_contact_penalty`:** janela segura de **−0.25 a −1.0** (com −0.25 até acelerando a transição); **−2.0** atrasa; **−4.0** colapsa — e no modo de falha mais contraintuitivo do estudo até agora: o robô punido ao máximo por bater a cabeça converge pra **bater a cabeça sempre**, porque o evento terminal custa pouco no retorno real (dt) e truncar o episódio "apaga" o futuro de baixo valor que a própria penalidade criou. Confirma parcialmente a predição do `illegal_contact_penalty` (atraso monotônico + travamento no ×4), mas revela um **segundo modo de falha**: colapso degenerado em vez de congelamento.
 
 ### flat\_orientation\_l2
 **Registro** (_go2\_env\_cfg.py:399_):
@@ -969,10 +997,10 @@ Pune o tronco **inclinado**. Alto força postura horizontal (estável, mas pode 
 
 | config | valor | razão vs baseline (-0.25) | comportamento | métricas |
 | ---| ---| ---| ---| --- |
-| `sweep_flatorient_0p0625.yml` | -0.0625 | ÷4 | | [wandb]() |
-| `sweep_flatorient_0p125.yml` | -0.125 | ÷2 | | [wandb]() |
-| `sweep_flatorient_0p5.yml` | -0.5 | ×2 | | [wandb]() |
-| `sweep_flatorient_1p0.yml` | -1.0 | ×4 | | [wandb]() |
+| `sweep_flatorient_0p0625.yml` | -0.0625 | ÷4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/5d4gmp8a?nw=nwuserimdudak) |
+| `sweep_flatorient_0p125.yml` | -0.125 | ÷2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/4fmrvhg3?nw=nwuserimdudak) |
+| `sweep_flatorient_0p5.yml` | -0.5 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/rghmg7tv?nw=nwuserimdudak) |
+| `sweep_flatorient_1p0.yml` | -1.0 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/3tuhoap8?nw=nwuserimdudak) |
 
 ## hiperparâmetros
 ### learning\_rate
