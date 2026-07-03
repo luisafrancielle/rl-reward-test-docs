@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page.title | default: site.title }} · {{ site.title }}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
+  <link rel="icon" type="image/png" href="{{ '/images/logo.png' | relative_url }}">
+  <link rel="apple-touch-icon" href="{{ '/images/logo.png' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
 
@@ -12,7 +14,7 @@
   <header class="site-header">
     <div class="header-content">
       <a class="brand" href="{{ '/' | relative_url }}">
-        <span class="brand-symbol">◈</span>
+        <img class="brand-symbol" src="{{ '/images/logo.png' | relative_url }}" alt="AKCIT RL">
 
         <span>
           <strong>RL REWARD</strong>
