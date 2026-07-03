@@ -71,9 +71,9 @@ body::before {
 
 .brand-symbol {
   display: block;
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 0 18px rgba(87, 221, 255, 0.4);
 }
@@ -455,6 +455,15 @@ body::before {
   display: block;
   width: 100%;
   border: 1px solid var(--paper-border);
+  border-radius: 0.3rem;
+}
+
+/* Imagens soltas de markdown (gráficos): nunca vazar da página */
+.content-card img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.2rem auto;
   border-radius: 0.3rem;
 }
 
