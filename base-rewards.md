@@ -138,7 +138,27 @@ onde:
 *   `dt ≈ 0.02` (multiplica **todo** termo igualmente)
 *   termos com `weight == 0` são pulados (não entram na soma)
 É **esse** `R_total` (por env, por step) que vira a recompensa do PPO. Cada `func_i` é uma das recompensas individuais (track\_lin, track\_ang, feet\_slide, is\_alive, etc.).
-### is\_alive
+
+**Visão geral dos pesos** (baseline, faixa segura e o que acontece nos extremos):
+
+| param | baseline | range aceitável | sintoma se alto demais | se baixo demais |
+| ---| ---| ---| ---| --- |
+| `is_alive` | 0.5 | 0.5 a 1.0 | anda mas com desempenho pior | demora muito para começar a caminhar |
+| `track_lin_vel_xy_exp` | 1.5 | 1.5 a 3.0 | foco em seguir velocidade: ignora estabilidade/suavidade | foco em estabilidade, não dá passos |
+| `track_ang_vel_z_exp` | 0.75 | 0.25 a 0.75 | foco no yaw, não anda | pode ter desvios laterais ao andar |
+| `lin_vel_z_l2` | \-2.0 | -5.0 a -2.0 | quanto mais negativo, menor o bouncing do robô | robô tende a galopar mais |
+| `ang_vel_xy_l2` | \-0.05 | -0.025 a -0.05 | quanto mais negativo, mais o robô cambaleia | quanto mais positivo, mais o robô oscila. treme |
+| `dof_torques_l2` | \-0.0002 | -1e-4 a -0.0002 | não anda, sem torque pra levantar, tomba pra trás | treme bastante |
+| `dof_acc_l2` | \-2.5e-7 | -1.25e-7 a -2.5e-7 | não anda, fica parado sem tomar ações | anda sem alternar as pernas |
+| `action_rate_l2` | \-0.01 | -0.005 a -0.01 | andar cada vez mais rígido, sem suavidade | robô treme bastante, toma ações demais |
+| `feet_air_time` | 0.5 | 0.125 a 0.5 | pula/exagera a passada | tende a tremer mais que o baseline |
+| `feet_slide` | \-0.25 | -0.125 a -0.25 | trava o pé, não anda | anda escorregando o pé (gait de arrasto) |
+| `illegal_contact_penalty` | \-1.0 | -0.25 a -1.0 | não anda, fica no ótimo local “sobreviver parado” | base do corpo mais estável |
+| `fall_penalty` | \-2.0 | -0.5 a -2.0 | anda, mais agachado | a caminhada chega mais rápido |
+| `head_contact_penalty` | \-1.0 | -0.5 a -1.0 | não anda, colapsa na transição e converge pra mergulho de cabeça | anda, transição mais cedo que o baseline, mas a caminhada não fica tão natural |
+| `flat_orientation_l2` | \-0.25 | -0.25 a -1.0 | não inclina pra caminhar, corpo mais retilíneo | corpo se inclina ao caminhar |
+
+### is\_alive {#is-alive}
 
 ```python
 def is_alive(env):
@@ -165,7 +185,7 @@ Sweep isalive\_0: [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/A
 </div>
 
 Com a recompensa desativada, o robô teve maior dificuldade para aprender a andar. Por outro lado, aumentar a recompensa para 1.0 piorou quase todos os gráficos(ou ficou muito parecido). ![](https://t90132646619.p.clickup-attachments.com/t90132646619/4ac6d146-3b1f-4503-86f1-3db038ac5d0f/image.png)
-### track\_lin\_vel\_xy\_exp
+### track\_lin\_vel\_xy\_exp {#track-lin}
 **Registro** (_go2\_env\_cfg.py:339_):
 
 ```python
@@ -228,7 +248,7 @@ _"quanto mais perto do comando, mais perto de 1"_
 | `sweep_tracklin_5p0.yml` | 5.0 | ×3 | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/men7c53s?nw=nwuserimdudak) |
 
 É até então a recompensa que mais impacta na tarefa de andar do robô. Valores muito baixos simplesmente não conseguem dar o incentivo certeiro de andar. Valores altos demais fazem com que alcançar a velocidade X seja muito superior que respeitar o restante das recompensas.
-### track\_ang\_vel\_z\_exp
+### track\_ang\_vel\_z\_exp {#track-ang}
 **Registro** (_go2\_env\_cfg.py:344_):
 
 ```cs
@@ -293,7 +313,7 @@ As recompensas lin\_vel\_z e lin\_vel\_xy competem entre si.
 
 ![](https://t90132646619.p.clickup-attachments.com/t90132646619/8c2c00a6-fa07-4277-b8ab-a4d621d1fe54/image.png)
 
-### lin\_vel\_z\_l2
+### lin\_vel\_z\_l2 {#lin-vel-z}
 **Registro** (_go2\_env\_cfg.py:349_):
 
 ```python
@@ -349,7 +369,7 @@ A ideia: numa caminhada boa, o tronco deve ficar numa altura **estável**, sem *
 | `sweep_linvelz_3p0.yml` | -3.0 | ×1.5 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/907uhqs5?nw=nwuserimdudak) |
 | `sweep_linvelz_5p0.yml` | -5.0 | ×2.5 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/1qy8uvjm?nw=nwuserimdudak) |
 
-### ang\_vel\_xy\_l2
+### ang\_vel\_xy\_l2 {#ang-vel-xy}
 **Registro** (_go2\_env\_cfg.py:350_):
 
 ```python
@@ -424,7 +444,7 @@ Os vídeos deixam claro que **ambos os extremos degradam, por motivos opostos**,
 
 **Conclusão do `ang_vel_xy_l2`:** janela **muito estreita**, baseline (-0.05) no ponto ótimo, com **dois modos de falha simétricos em sintoma mas opostos em causa**. Sub-peso (`≤ -0.025`): anda **rápido mas mais bambo/esquisito**, melhor tracking bruto, tronco cambaleando mais (sem chegar a cair, o termo só deixa de firmar o gait). Sobre-peso (`-0.1` → `-0.2`): caminhada pior evoluindo pra **freeze total**, mesma barreira de energia do `illegal_contact ×4`, onde a fase desajeitada (cambaleio necessário pra aprender) fica cara demais e o PPO nunca atravessa. O caso é um **alerta metodológico duplo**: (1) os **termos de custo** (suavidade/sobrevivência/contato) *melhoram* monotonicamente com o peso justamente porque o robô abandona a tarefa, vale medindo per-step ou episódico; (2) além disso, as somas **episódicas** são ainda mais infladas por episódios mais longos do robô parado. As duas conspiram pra fazer o `-0.2` parecer a melhor config no dashboard. Só o `track_lin_vel_xy_exp`, a métrica que não dá pra hackear ficando parado, e o vídeo revelam a verdade.
 
-### dof\_torques\_l2
+### dof\_torques\_l2 {#dof-torques}
 **Registro** (_go2\_env\_cfg.py:351_):
 
 ```python
@@ -495,7 +515,7 @@ Aqui o modo de falha do peso alto **não é barreira de energia**, é **starvati
 
 **Conclusão do `dof_torques_l2`:** janela segura de **−5e-5 a −2e-4** (baseline), com trade-off claro: quanto mais baixo, mais tremor (mas anda); baseline é o melhor equilíbrio suavidade×capacidade. A partir de **−4e-4** o robô começa a ficar fraco demais (mal caminha, tomba pra trás) e em **−8e-4** a atuação é insuficiente pra locomoção. O modo de falha é **starvation de torque** (fraqueza física, tombo pra trás), não barreira de energia, diagnosticável pelo `flat_orientation_l2` travado no tilt máximo. E confirma pela terceira vez o alerta metodológico: os termos de custo de suavidade premiam o robô fraco-e-parado; só o `track_lin_vel_xy_exp` e o vídeo distinguem "suave porque bom" de "suave porque imóvel".
 
-### dof\_acc\_l2
+### dof\_acc\_l2 {#dof-acc}
 **Registro** (_go2\_env\_cfg.py:352_):
 
 ```python
@@ -568,7 +588,7 @@ No gráfico do `track_lin_vel_xy_exp` acima dá pra ver os dois modos de falha: 
 
 **Conclusão do `dof_acc_l2`:** baseline (**−2.5e-7**) perto do ótimo, janela útil estreita, com `1p25e7` como vizinho mais seguro. Abaixo (`−6.25e-8`) as pernas **param de alternar** (movem em sincronia, no chão, sem saltar); acima, `−5e-7` engessa a passada e `−1e-6` congela. O achado central é o **contraste com o `dof_torques`**: dois termos de suavização irmãos, mas o barateamento de cada um libera um vício distinto, **tremor** (torque) vs **perda de alternância das pernas** (aceleração), porque punem coisas diferentes do movimento (força vs abruptez). E reforça a lição do `feet_slide`: o freeze o `track_lin` pega, mas o gait degenerado que **ainda avança** (pernas sem alternar) exige o vídeo.
 
-### action\_rate\_l2
+### action\_rate\_l2 {#action-rate}
 **Registro** (_go2\_env\_cfg.py:353_):
 
 ```python
@@ -641,7 +661,7 @@ No `track_lin_vel_xy_exp` acima, **todas as curvas sobem** (nenhuma trava embaix
 
 **Conclusão do `action_rate_l2`:** o mais **benigno** dos suavizadores, janela larga, todos os pesos testados andam. O ótimo fica em torno de `-0.005` (ligeiramente **abaixo** do baseline -0.01, que parece amortecer de leve a mais); abaixo disso segue funcional (o tremor fino já é coberto por `dof_torques`/`dof_acc`); acima, a passada endurece progressivamente (`0p04` anda laborioso) **sem nunca congelar**. A lição é o contraste dentro do trio: o modo de falha do excesso escala com o quão **física** é a grandeza punida, força e aceleração travam/enfraquecem; a ação, por agir antes da dinâmica, só perde agilidade. É o único termo de custo do estudo até agora cujo ×4 não produz freeze nem colapso.
 
-### feet\_air\_time
+### feet\_air\_time {#feet-air-time}
 **Registro** (_go2\_env\_cfg.py:354_):
 
 ```python
@@ -724,7 +744,7 @@ Este é o primeiro **incentivo positivo** documentado (os anteriores eram penali
 
 **Conclusão do `feet_air_time`:** janela segura de **~0.125 a 0.5** (baseline), com o lado **baixo indiferente** (o bônus é dispensável, dá pra reduzir sem perda) e o lado **alto perigoso**: a partir de **1.0** a passada começa a exagerar e em **2.0** o robô troca locomoção por *farming* de air time, andando mal e transicionando tarde. É o retrato oposto das penalidades terminais (onde o alto trava e o baixo não muda nada): como é **recompensa positiva concorrente com a tarefa**, o excesso vira objetivo rival. Regra prática: `feet_air_time` é um **tempero de gait**, não um driver, mantenha modesto (≤ baseline ou 1/3 do track_lin_vel_xy_exp).
 
-### feet\_slide
+### feet\_slide {#feet-slide}
 **Registro** (_go2\_env\_cfg.py:401_):
 
 ```python
@@ -802,7 +822,7 @@ Mesma assimetria de penalidade que o `ang_vel_xy` (baixo falha em fazer o trabal
 
 **Conclusão do `feet_slide`:** baseline (**−0.25**) é o ponto ótimo, com janela útil estreita. Abaixo (`−0.125`, `−0.0625`) o pé volta a **arrastar** (o vício que o termo existe pra matar); acima, `−0.5` enrijece (pé colado, anda mal) e `−1.0` congela. O achado metodológico é o mais importante da seção: **este é o primeiro reward cujo modo de falha (arrastar o pé) passa despercebido pelo `track_lin_vel_xy_exp`**, porque o tronco avança normalmente e a métrica só mede o tronco. Atualiza a regra do estudo: o `track_lin` derruba hacking por **inatividade** (parado/fraco/travado não movem o tronco, logo aparecem), mas é silencioso quanto à **qualidade do gait** (o pé pode arrastar com o corpo avançando). Para esses termos, é preciso o vídeo ou uma métrica direta do pé.
 
-### undesired\_contacts
+### undesired\_contacts {#undesired-contacts}
 **Registro** (_go2\_env\_cfg.py:372_):
 
 ```python
@@ -867,7 +887,7 @@ Pune contato em partes que **não deveriam** tocar o chão (ex.: coxas). Força 
 | `sweep_undesired_0p4.yml` | -0.4 | ×2 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/x28i3r91?nw=nwuserimdudak) |
 | `sweep_undesired_0p8.yml` | -0.8 | ×4 | | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/swzadjz4?nw=nwuserimdudak) |
 
-### illegal\_contact\_penalty
+### illegal\_contact\_penalty {#illegal-contact}
 **Registro** (_go2\_env\_cfg.py:380_):
 
 ```python
@@ -941,7 +961,7 @@ Pelo gráfico, conseguimos ver que −4.0 bloqueia a transição pra caminhada: 
 
 **Conclusão do `illegal_contact_penalty`:** janela segura de **−0.25 a −1.0** (indiferente); a partir de **−2.0** começa a competir com a tarefa e em **−4.0** domina. O peso funciona como uma **barreira de energia** pra transição: aprender a andar exige atravessar uma fase intermediária desajeitada em que a base toca o chão com frequência, e é exatamente essa fase que a penalidade taxa. Quanto maior o peso, mais caro o "vale" entre parado-estável e andando-estável: o atraso da transição cresce com o peso (−2.0 → +250M) até um ponto em que o PPO nunca acha que vale a pena atravessar (−4.0). Mesma família de fenômeno do `is_alive`/`fall_penalty`: penalidade terminal forte não ensina a "não colidir andando", ensina a **não andar**. Predição pros sweeps de `fall_penalty` e `head_contact_penalty`: mesmo padrão de atraso monotônico, com o `fall_8p0` como candidato a travar de vez.
 
-### fall\_penalty
+### fall\_penalty {#fall-penalty}
 **Registro** (_go2\_env\_cfg.py:385_):
 
 ```python
@@ -1013,7 +1033,7 @@ No `track_lin_vel_xy_exp` acima, **todas as curvas sobem** (nenhuma trava, confi
 
 **Conclusão do `fall_penalty`:** o mais bem-comportado das penalidades terminais, todos andam, janela larga. O ótimo tende pra **baixo** (`0p5` melhor), a caução mínima já basta; o excesso (`8p0`) não trava, só faz **agachar** (adaptação postural, não colapso). Contraste com `illegal_contact`/`head_contact`: aqueles ×4 travam/colapsam porque o evento punido é inevitável na fase de aprender; a queda é evitável **enquanto anda** (é só abaixar o corpo), então o robô adapta em vez de desistir.
 
-### head\_contact\_penalty
+### head\_contact\_penalty {#head-contact}
 **Registro** (_go2\_env\_cfg.py:390_):
 
 ```python
@@ -1088,7 +1108,7 @@ Protege contra **mergulhar a frente do corpo** (cabeçada/tombo pra frente). Alt
 
 **Conclusão do `head_contact_penalty`:** janela segura de **−0.25 a −1.0** (com −0.25 até acelerando a transição); **−2.0** atrasa; **−4.0** colapsa, e no modo de falha mais contraintuitivo do estudo até agora: o robô punido ao máximo por bater a cabeça converge pra **bater a cabeça sempre**, porque o evento terminal custa pouco no retorno real (dt) e truncar o episódio "apaga" o futuro de baixo valor que a própria penalidade criou. Confirma parcialmente a predição do `illegal_contact_penalty` (atraso monotônico + travamento no ×4), mas revela um **segundo modo de falha**: colapso degenerado em vez de congelamento.
 
-### flat\_orientation\_l2
+### flat\_orientation\_l2 {#flat-orientation}
 **Registro** (_go2\_env\_cfg.py:399_):
 
 ```python
@@ -1158,7 +1178,7 @@ No `track_lin_vel_xy_exp` acima, **todos convergem** pra ~1.25 (nenhum modo de f
 **Conclusão do `flat_orientation_l2`:** único termo do estudo em que **subir o peso só melhora** dentro da faixa testada, sem freeze nem degradação; o `1p0` (×4) dá o andar mais natural e o **limite superior não foi encontrado** (recomendo estender o sweep pra ×8/×16). A lição casa com o `ang_vel_xy`: penalizar a **postura-alvo** (tronco nivelado) é um prior barato e alinhado com a tarefa, enquanto penalizar a **velocidade** dessa mesma postura sufoca o gait. Bom candidato a **aumentar** no baseline.
 
 ## hiperparâmetros
-### learning\_rate
+### learning\_rate {#learning-rate}
 **Otimizador:**
 É o tamanho do passo do Adam que atualiza **a política e o critic juntos** (mesma rede/otimizador).
 
@@ -1197,20 +1217,6 @@ Sweep lr 0003 : [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akc
 #### Como impacta o aprendizado?
 *   Controla **quão rápido** a política muda a cada update. Não muda o gradiente (a direção), só a **magnitude do passo**.
 *   Como esperado, diminuir o LR fez com que o aprendizado demorasse um pouco mais para convergir, mas ainda chega no mesmo local que as outras configs.![](https://t90132646619.p.clickup-attachments.com/t90132646619/b7a9d1f5-0a8e-4e5e-8142-7e9c7399aa69/image.png)
-
-####   
-
-| param | atual | efeito de aumentar | sintoma se alto demais | se baixo demais |
-| ---| ---| ---| ---| --- |
-| `track_lin_vel_xy_exp` | 1.5 | foco em seguir velocidade | ignora estabilidade/suavidade | não anda no comando |
-| `track_ang_vel_z_exp` | 0.75 | foco no yaw | sacrifica linear | não vira |
-| `is_alive` | 0.5 | "só sobreviver" vale mais | ótimo local: anda aleatório só pra não cair | cai fácil |
-| `feet_air_time` | 0.5 | passos mais marcados | pula/exagera a passada | arrasta/escorrega |
-| `feet_slide` | \-0.25 | pune arrastar pé | trava o pé, anda rígido | arrasta |
-| `action_rate_l2` | \-0.01 | suaviza ações | robô lento/cauteloso | ações bruscas, tremor |
-| `dof_torques_l2` | \-0.0002 | economiza torque | fraco, não levanta direito | gasta energia, brusco |
-| `flat_orientation_l2` | \-0.25 | tronco nivelado | não inclina pra acelerar | tomba/senta |
-| `fall_penalty` | \-2.0 | medo de cair | cauteloso demais, não arrisca | cai sem custo |
 
 ## PPO, hiperparâmetros
 

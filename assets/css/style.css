@@ -467,6 +467,84 @@ body::before {
   border-radius: 0.3rem;
 }
 
+/* Índice lateral de recompensas (base-rewards) */
+.doc-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.doc-layout .content-card {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.reward-toc {
+  position: sticky;
+  top: 96px;
+  flex: 0 0 210px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding: 1rem 0.85rem;
+  border: 1px solid var(--paper-border);
+  border-radius: 0.55rem;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(39, 27, 53, 0.06);
+}
+
+.reward-toc .toc-title {
+  margin: 0 0 0.55rem;
+  color: var(--paper-accent);
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.reward-toc .toc-title-sub {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--paper-border);
+}
+
+.reward-toc a {
+  display: block;
+  padding: 0.32rem 0.5rem;
+  border-radius: 0.35rem;
+  color: #2457c5;
+  font-size: 0.82rem;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reward-toc a:hover {
+  background: #f0eafb;
+}
+
+/* âncora não fica escondida atrás do header fixo ao clicar no índice */
+.section-base-rewards .content-card h2,
+.section-base-rewards .content-card h3 {
+  scroll-margin-top: 90px;
+}
+
+@media (max-width: 900px) {
+  .doc-layout {
+    display: block;
+  }
+
+  .reward-toc {
+    display: none;
+  }
+
+  .doc-layout .content-card {
+    margin: 2rem auto 0;
+  }
+}
+
 @media (max-width: 720px) {
   .video-pair,
   .image-pair {

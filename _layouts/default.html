@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page.title | default: site.title }} · {{ site.title }}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
-  <link rel="icon" type="image/png" href="{{ '/images/logo.png' | relative_url }}">
-  <link rel="apple-touch-icon" href="{{ '/images/logo.png' | relative_url }}">
+  <link rel="icon" type="image/png" href="{{ '/images/logo.png' | relative_url }}?v={{ site.time | date: '%s' }}">
+  <link rel="apple-touch-icon" href="{{ '/images/logo.png' | relative_url }}?v={{ site.time | date: '%s' }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
 
@@ -74,9 +74,38 @@
       {% endif %}
     {% endunless %}
 
-    <article class="content-card">
-      {{ content }}
-    </article>
+    {% if page.section == 'base-rewards' %}
+      <div class="doc-layout">
+        <nav class="reward-toc" aria-label="Índice de recompensas">
+          <p class="toc-title">Recompensas</p>
+          <a href="#is-alive">is_alive</a>
+          <a href="#track-lin">track_lin_vel_xy_exp</a>
+          <a href="#track-ang">track_ang_vel_z_exp</a>
+          <a href="#lin-vel-z">lin_vel_z_l2</a>
+          <a href="#ang-vel-xy">ang_vel_xy_l2</a>
+          <a href="#dof-torques">dof_torques_l2</a>
+          <a href="#dof-acc">dof_acc_l2</a>
+          <a href="#action-rate">action_rate_l2</a>
+          <a href="#feet-air-time">feet_air_time</a>
+          <a href="#feet-slide">feet_slide</a>
+          <a href="#undesired-contacts">undesired_contacts</a>
+          <a href="#illegal-contact">illegal_contact_penalty</a>
+          <a href="#fall-penalty">fall_penalty</a>
+          <a href="#head-contact">head_contact_penalty</a>
+          <a href="#flat-orientation">flat_orientation_l2</a>
+          <p class="toc-title toc-title-sub">Hiperparâmetros</p>
+          <a href="#learning-rate">learning_rate</a>
+        </nav>
+
+        <article class="content-card">
+          {{ content }}
+        </article>
+      </div>
+    {% else %}
+      <article class="content-card">
+        {{ content }}
+      </article>
+    {% endif %}
   </main>
 
   <footer>
