@@ -26,6 +26,7 @@ Esta tabela apresenta apenas as linhas/parâmetros de recompensa (rewards) que s
 | `flat_orientation_l2` | -0.25 | -0.125 | -0.125 | -0.125 | -1.0 |
 | `feet_air_time` | 0.5 | 0.25 | 0.25 | 0.25 | 0.5 |
 | `feet_slide` | -0.25 | -0.20 | -0.20 | -0.20 | -0.25 |
+| **Link do WandB** | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/bbeow45c?nw=nwuserimdudak) | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/17nhcywi?nw=nwuserimdudak) | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/ac9ktch4?nw=nwuserimdudak) | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/sj5llh1c?nw=nwuserimdudak) | [wandb](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/oa1cgh7j?nw=nwuserimdudak) |
 
 ### Vídeos das Versões Modificadas
 
@@ -60,7 +61,7 @@ Esta tabela apresenta apenas as linhas/parâmetros de recompensa (rewards) que s
 
 ## Detalhamento das Mudanças e Raciocínio (Baseado nos Comentários)
 
-### 1. Mudanças no `flat_vel_fwd_base_2.yml`
+### 1. Mudanças no [`flat_vel_fwd_base_2.yml`](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/17nhcywi?nw=nwuserimdudak)
 
 * **`lin_vel_z_l2`**: Reduzido de `-2.0` para `-3.0`.
   * **Raciocínio**: *"quanto mais negativo menor o bouncing of the robot"* (minimiza o balanço/oscilação vertical do robô).
@@ -70,19 +71,19 @@ Esta tabela apresenta apenas as linhas/parâmetros de recompensa (rewards) que s
 * **`feet_slide`**: Aumentado de `-0.25` (mais punitivo) para `-0.20` (menos punitivo).
   * **Raciocínio**: *"could be smaller"* (pode ser menor/menos rigoroso).
 
-### 2. Mudanças no `flat_vel_fwd_base_3.yml`
+### 2. Mudanças no [`flat_vel_fwd_base_3.yml`](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/ac9ktch4?nw=nwuserimdudak)
 
 * Mantém as alterações da versão 2 (`lin_vel_z_l2`, `flat_orientation_l2`, `feet_air_time` e `feet_slide`).
 * **`track_ang_vel_z_exp`**: Reduzido de `0.75` para `0.50`.
   * **Raciocínio**: *"decrease can help with the walking"* (ajuda a melhorar a qualidade do andar).
 
-### 3. Mudanças no `flat_vel_fwd_base_4.yml`
+### 3. Mudanças no [`flat_vel_fwd_base_4.yml`](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/sj5llh1c?nw=nwuserimdudak)
 
 * Mantém as alterações da versão 3.
 * **`action_rate_l2`**: Ajustado de `-0.01` para `-0.005`.
   * **Raciocínio**: *"decrease can help with chooking"* (diminui a punição na taxa de variação de ação para evitar tremeliques ou travamento/instabilidade nas ações).
 
-### 4. Mudanças no `flat_vel_fwd_base_5.yml`
+### 4. Mudanças no [`flat_vel_fwd_base_5.yml`](https://wandb.ai/imdudak-federal-university-of-goi-s/Akcit-RL/runs/oa1cgh7j?nw=nwuserimdudak)
 
 * Parte diretamente do Baseline (não herda as modificações das versões 2, 3 e 4).
 * **`flat_orientation_l2`**: Aumentado consideravelmente de `-0.25` para `-1.0` (penalidade muito mais rigorosa para orientações não-placas).
