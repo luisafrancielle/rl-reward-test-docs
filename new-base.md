@@ -1,0 +1,89 @@
+---
+layout: default
+title: Rewards · New Base
+section: new-base
+kicker: NEW BASE
+description: Comparativo de Configurações de Recompensa (Apenas Parâmetros Modificados).
+permalink: /new-base/
+---
+
+# Comparativo de Configurações de Recompensa (Apenas Parâmetros Modificados)
+
+Esta tabela apresenta apenas as linhas/parâmetros de recompensa (rewards) que sofreram alguma modificação em relação ao arquivo de baseline.
+
+<div class="video-panel video-single">
+  <p><strong>Baseline (`flat_vel_fwd_base.yml`)</strong></p>
+  <video controls preload="metadata">
+    <source src="{{ '/videos/new-base_policy-step-699924480.mp4' | relative_url }}" type="video/mp4">
+  </video>
+</div>
+
+| Parâmetro Modificado | Baseline (`flat_vel_fwd_base.yml`) | `flat_vel_fwd_base_2.yml` | `flat_vel_fwd_base_3.yml` | `flat_vel_fwd_base_4.yml` | `flat_vel_fwd_base_5.yml` |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| `track_ang_vel_z_exp` | 0.75 | 0.75 | 0.50 | 0.50 | 0.75 |
+| `lin_vel_z_l2` | -2.0 | -3.0 | -3.0 | -3.0 | -2.0 |
+| `action_rate_l2` | -0.01 | -0.01 | -0.01 | -0.005 | -0.01 |
+| `flat_orientation_l2` | -0.25 | -0.125 | -0.125 | -0.125 | -1.0 |
+| `feet_air_time` | 0.5 | 0.25 | 0.25 | 0.25 | 0.5 |
+| `feet_slide` | -0.25 | -0.20 | -0.20 | -0.20 | -0.25 |
+
+### Vídeos das Versões Modificadas
+
+<div class="video-pair">
+  <div class="video-panel">
+    <p><strong>flat_vel_fwd_base_2.yml</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/new-base-2_policy-step-699924480.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>flat_vel_fwd_base_3.yml</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/new-base-3_policy-step-699924480.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>flat_vel_fwd_base_4.yml</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/new-base-4_policy-step-699924480.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-panel">
+    <p><strong>flat_vel_fwd_base_5.yml</strong></p>
+    <video controls preload="metadata">
+      <source src="{{ '/videos/new-base-5_policy-step-699924480.mp4' | relative_url }}" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+---
+
+## Detalhamento das Mudanças e Raciocínio (Baseado nos Comentários)
+
+### 1. Mudanças no `flat_vel_fwd_base_2.yml`
+
+* **`lin_vel_z_l2`**: Reduzido de `-2.0` para `-3.0`.
+  * **Raciocínio**: *"quanto mais negativo menor o bouncing of the robot"* (minimiza o balanço/oscilação vertical do robô).
+* **`flat_orientation_l2`**: Ajustado de `-0.25` para `-0.125`.
+* **`feet_air_time`**: Reduzido de `0.5` para `0.25`.
+  * **Raciocínio**: *"could be smaller"* (pode ser menor com base em experimentos).
+* **`feet_slide`**: Aumentado de `-0.25` (mais punitivo) para `-0.20` (menos punitivo).
+  * **Raciocínio**: *"could be smaller"* (pode ser menor/menos rigoroso).
+
+### 2. Mudanças no `flat_vel_fwd_base_3.yml`
+
+* Mantém as alterações da versão 2 (`lin_vel_z_l2`, `flat_orientation_l2`, `feet_air_time` e `feet_slide`).
+* **`track_ang_vel_z_exp`**: Reduzido de `0.75` para `0.50`.
+  * **Raciocínio**: *"decrease can help with the walking"* (ajuda a melhorar a qualidade do andar).
+
+### 3. Mudanças no `flat_vel_fwd_base_4.yml`
+
+* Mantém as alterações da versão 3.
+* **`action_rate_l2`**: Ajustado de `-0.01` para `-0.005`.
+  * **Raciocínio**: *"decrease can help with chooking"* (diminui a punição na taxa de variação de ação para evitar tremeliques ou travamento/instabilidade nas ações).
+
+### 4. Mudanças no `flat_vel_fwd_base_5.yml`
+
+* Parte diretamente do Baseline (não herda as modificações das versões 2, 3 e 4).
+* **`flat_orientation_l2`**: Aumentado consideravelmente de `-0.25` para `-1.0` (penalidade muito mais rigorosa para orientações não-placas).
+  * **Raciocínio**: *"can help with the gait"* (ajuda a melhorar/estabilizar a marcha/gait).

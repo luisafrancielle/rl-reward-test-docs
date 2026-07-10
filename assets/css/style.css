@@ -290,7 +290,8 @@ body::before {
 }
 
 .section-base-rewards,
-.section-teacher-student-rewards {
+.section-teacher-student-rewards,
+.section-new-base {
   --paper-border: #e7e2ef;
   --paper-text: #24172f;
   --paper-muted: #5f556b;
@@ -302,33 +303,39 @@ body::before {
 }
 
 .section-base-rewards::before,
-.section-teacher-student-rewards::before {
+.section-teacher-student-rewards::before,
+.section-new-base::before {
   display: none;
 }
 
 .section-base-rewards .page-container,
-.section-teacher-student-rewards .page-container {
+.section-teacher-student-rewards .page-container,
+.section-new-base .page-container {
   width: min(1160px, calc(100% - 2rem));
   padding: 2.5rem 0 4rem;
 }
 
 .section-base-rewards .eyebrow,
-.section-teacher-student-rewards .eyebrow {
+.section-teacher-student-rewards .eyebrow,
+.section-new-base .eyebrow {
   color: var(--paper-accent);
 }
 
 .section-base-rewards .page-title,
-.section-teacher-student-rewards .page-title {
+.section-teacher-student-rewards .page-title,
+.section-new-base .page-title {
   color: #201328;
 }
 
 .section-base-rewards .page-description,
-.section-teacher-student-rewards .page-description {
+.section-teacher-student-rewards .page-description,
+.section-new-base .page-description {
   color: var(--paper-muted);
 }
 
 .section-base-rewards .content-card,
-.section-teacher-student-rewards .content-card {
+.section-teacher-student-rewards .content-card,
+.section-new-base .content-card {
   max-width: 860px;
   min-height: calc(100vh - 16rem);
   margin: 2rem auto 0;
@@ -345,36 +352,45 @@ body::before {
 .section-base-rewards .content-card h3,
 .section-teacher-student-rewards .content-card h1,
 .section-teacher-student-rewards .content-card h2,
-.section-teacher-student-rewards .content-card h3 {
+.section-teacher-student-rewards .content-card h3,
+.section-new-base .content-card h1,
+.section-new-base .content-card h2,
+.section-new-base .content-card h3 {
   color: #1f1328;
 }
 
 .section-base-rewards .content-card h2,
-.section-teacher-student-rewards .content-card h2 {
+.section-teacher-student-rewards .content-card h2,
+.section-new-base .content-card h2 {
   border-bottom-color: var(--paper-border);
 }
 
 .section-base-rewards .content-card p,
 .section-base-rewards .content-card li,
 .section-teacher-student-rewards .content-card p,
-.section-teacher-student-rewards .content-card li {
+.section-teacher-student-rewards .content-card li,
+.section-new-base .content-card p,
+.section-new-base .content-card li {
   color: var(--paper-text);
 }
 
 .section-base-rewards .content-card a,
-.section-teacher-student-rewards .content-card a {
+.section-teacher-student-rewards .content-card a,
+.section-new-base .content-card a {
   color: #2457c5;
 }
 
 .section-base-rewards .content-card blockquote,
-.section-teacher-student-rewards .content-card blockquote {
+.section-teacher-student-rewards .content-card blockquote,
+.section-new-base .content-card blockquote {
   border-left-color: var(--paper-accent);
   color: #35273f;
   background: #f5f0fb;
 }
 
 .section-base-rewards .content-card th,
-.section-teacher-student-rewards .content-card th {
+.section-teacher-student-rewards .content-card th,
+.section-new-base .content-card th {
   color: #2d1940;
   background: #f6f2fb;
 }
@@ -382,12 +398,15 @@ body::before {
 .section-base-rewards .content-card th,
 .section-base-rewards .content-card td,
 .section-teacher-student-rewards .content-card th,
-.section-teacher-student-rewards .content-card td {
+.section-teacher-student-rewards .content-card td,
+.section-new-base .content-card th,
+.section-new-base .content-card td {
   border-bottom-color: var(--paper-border);
 }
 
 .section-base-rewards .content-card code,
-.section-teacher-student-rewards .content-card code {
+.section-teacher-student-rewards .content-card code,
+.section-new-base .content-card code {
   padding: 0.12rem 0.28rem;
   border-radius: 0.22rem;
   color: #9d174d;
@@ -395,7 +414,8 @@ body::before {
 }
 
 .section-base-rewards .content-card pre,
-.section-teacher-student-rewards .content-card pre {
+.section-teacher-student-rewards .content-card pre,
+.section-new-base .content-card pre {
   padding: 1rem 1.1rem;
   border: 1px solid #e5dced;
   border-radius: 0.35rem;
@@ -404,7 +424,8 @@ body::before {
 }
 
 .section-base-rewards .content-card pre code,
-.section-teacher-student-rewards .content-card pre code {
+.section-teacher-student-rewards .content-card pre code,
+.section-new-base .content-card pre code {
   padding: 0;
   color: #2a2330;
   background: transparent;
@@ -527,7 +548,9 @@ body::before {
 
 /* âncora não fica escondida atrás do header fixo ao clicar no índice */
 .section-base-rewards .content-card h2,
-.section-base-rewards .content-card h3 {
+.section-base-rewards .content-card h3,
+.section-new-base .content-card h2,
+.section-new-base .content-card h3 {
   scroll-margin-top: 90px;
 }
 

@@ -33,6 +33,11 @@
           Rewards · Base
         </a>
 
+        <a href="{{ '/new-base/' | relative_url }}"
+           class="{% if page.section == 'new-base' %}active{% endif %}">
+          New Base
+        </a>
+
         <a href="{{ '/teacher-student-rewards/' | relative_url }}"
            class="{% if page.section == 'teacher-student-rewards' %}active{% endif %}">
           Rewards · Teacher–Student
@@ -54,6 +59,10 @@
         <div class="hero-buttons">
           <a class="button primary" href="{{ '/base-rewards/' | relative_url }}">
             Ver rewards da Base
+          </a>
+
+          <a class="button secondary" href="{{ '/new-base/' | relative_url }}">
+            Ver rewards New Base
           </a>
 
           <a class="button secondary" href="{{ '/teacher-student-rewards/' | relative_url }}">

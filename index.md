@@ -15,6 +15,7 @@ Este espaço centraliza a documentação das funções de recompensa utilizadas 
 | Contexto | Descrição |
 |---|---|
 | Rewards · Arquitetura Base | Função de recompensa usada no pipeline padrão de treinamento. |
+| Rewards · New Base | Comparação detalhada de configurações com o novo baseline. |
 | Rewards · Teacher–Student | Função de recompensa usada na arquitetura teacher-student. |
 
 ## Objetivo
