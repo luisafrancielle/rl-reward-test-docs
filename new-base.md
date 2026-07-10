@@ -11,15 +11,16 @@ permalink: /new-base/
 
 Esta tabela apresenta apenas as linhas/parâmetros de recompensa (rewards) que sofreram alguma modificação em relação ao arquivo de baseline.
 
-<div class="video-panel video-single">
+<div class="video-panel">
   <p><strong>Baseline (`flat_vel_fwd_base.yml`)</strong></p>
   <video controls preload="metadata">
     <source src="{{ '/videos/new-base_policy-step-699924480.mp4' | relative_url }}" type="video/mp4">
   </video>
 </div>
 
-| Parâmetro Modificado | Baseline (`flat_vel_fwd_base.yml`) | `flat_vel_fwd_base_2.yml` | `flat_vel_fwd_base_3.yml` | `flat_vel_fwd_base_4.yml` | `flat_vel_fwd_base_5.yml` |
+| Parâmetro Modificado | Baseline | Base 2 | Base 3 | Base 4 | Base 5 |
 |:---|:---:|:---:|:---:|:---:|:---:|
+| **Arquivo de Config** | `flat_vel_fwd_base.yml` | `flat_vel_fwd_base_2.yml` | `flat_vel_fwd_base_3.yml` | `flat_vel_fwd_base_4.yml` | `flat_vel_fwd_base_5.yml` |
 | `track_ang_vel_z_exp` | 0.75 | 0.75 | 0.50 | 0.50 | 0.75 |
 | `lin_vel_z_l2` | -2.0 | -3.0 | -3.0 | -3.0 | -2.0 |
 | `action_rate_l2` | -0.01 | -0.01 | -0.01 | -0.005 | -0.01 |

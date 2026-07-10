@@ -261,7 +261,9 @@ body::before {
 }
 
 .content-card table {
+  display: block;
   width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
 }
 
